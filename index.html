@@ -1,0 +1,303 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>HelperAI</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b5">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            margin: 0;
+            background: #f6f7f9;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #111412;
+            color: #fff;
+            align-items: center;
+        }
+
+        #chat {
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            padding: 12px;
+            scroll-behavior: smooth;
+        }
+
+        .msg {
+            margin: 8px 0;
+            padding: 10px 12px;
+            border-radius: 18px;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+
+        .user {
+            background: #cfe8ff;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .bot {
+            background: #fff;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        #inputBar {
+            display: flex;
+            padding: 10px;
+            gap: 8px;
+            border-top: 1px solid #eee;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
+            background: #fff;
+        }
+
+        input[type=text] {
+            flex: 1;
+            padding: 12px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            background: #0ac956;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #09a84b;
+        }
+
+        .biz-card {
+            border: 1px solid #eee;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            height: 32px;
+            width: 32px;
+            border-radius: 8px;
+            background: #fff;
+            padding: 4px;
+        }
+
+        #bizModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #bizModal .content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #bizModal label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #bizModal input,
+        #bizModal select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-top: 4px;
+            box-sizing: border-box;
+        }
+
+        #bizModal button {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0ac956;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div style="display:flex;align-items:center;gap:12px">
+            <img src="logo.png" alt="HelperAI Logo" class="logo" />
+            <strong>HelperAI</strong>
+        </div>
+        <div><button id="businessBtn">Business</button></div>
+    </header>
+    <div id="chat"></div>
+    <div id="inputBar">
+        <input id="prompt" placeholder="Ask anything...">
+        <button id="sendBtn">Send</button>
+    </div>
+    <div id="bizModal">
+        <div class="content">
+            <h3>Business Signup</h3>
+            <label>Name <input id="biz_name" type="text" /></label>
+            <label>Email <input id="biz_email" type="email" /></label>
+            <label>Phone <input id="biz_phone" type="tel" /></label>
+            <label>Type <select id="biz_type">
+                    <option value="local">Local</option>
+                    <option value="global">Global</option>
+                </select></label>
+            <label>Categories <input id="biz_cat" type="text" placeholder="e.g., food, services" /></label>
+            <label>Address <input id="biz_addr" type="text" /></label>
+            <div style="margin-top:16px; text-align: right;">
+                <button id="bizClose">Close</button>
+                <button id="bizCreate">Create & Pay</button>
+            </div>
+            <div id="bizMsg" style="font-size:13px;color:#444;margin-top:12px"></div>
+        </div>
+    </div>
+    <script>
+        const API_BASE = "https://your-api-gateway-url.amazonaws.com"; // <-- Replace with your deployed API URL
+        let session_id = localStorage.getItem('session_id') || crypto.randomUUID();
+        localStorage.setItem('session_id', session_id);
+        const chat = document.getElementById('chat');
+        const promptInput = document.getElementById('prompt');
+        const sendBtn = document.getElementById('sendBtn');
+        const bizModal = document.getElementById('bizModal');
+        function addMessage(text, who = 'bot') {
+            const d = document.createElement('div');
+            d.className = 'msg ' + who;
+            d.innerHTML = text;
+            chat.appendChild(d);
+            chat.scrollTop = chat.scrollHeight;
+        }
+        promptInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendBtn.click();
+        });
+        sendBtn.onclick = async () => {
+            const text = promptInput.value.trim();
+            if (!text) return;
+            addMessage(text, 'user');
+            promptInput.value = '';
+            addMessage('<div class="loader"></div> Thinking...', 'bot');
+            let loc = null;
+            try {
+                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000 }));
+                loc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+            } catch (e) {
+                console.error("Geolocation error: ", e);
+                addMessage('Could not get your location.', 'bot');
+            }
+            const payload = { session_id, prompt: text, lat: loc?.lat, lon: loc?.lon };
+            try {
+                const res = await fetch(API_BASE + '/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                const msgs = Array.from(document.getElementsByClassName('msg'));
+                if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
+                let answerHtml = data.answer || "No response";
+                if (data.tools_used && data.tools_used.length > 0) answerHtml += '<div style="font-size:12px;color:#666;margin-top:8px">Sourced from live web</div>';
+                addMessage(answerHtml, 'bot');
+                if (data.business_recommendations && data.business_recommendations.length) {
+                    data.business_recommendations.forEach(b => {
+                        const card = document.createElement('div');
+                        card.className = 'biz-card';
+                        card.innerHTML = `<strong>${b.name}</strong><div>${b.address || ''}</div><div>${b.distance_m ? Math.round(b.distance_m) + ' m away' : ''}</div><div style="margin-top:8px; display: flex; gap: 8px;"><a href="tel:${b.phone}" class="btn">Call</a> <a href="https://www.google.com/maps/search/?api=1&query=${b.lat},${b.lon}" target="_blank" class="btn">Directions</a></div>`;
+                        chat.appendChild(card);
+                    });
+                    chat.scrollTop = chat.scrollHeight;
+                }
+            } catch (err) {
+                console.error("API call error: ", err);
+                addMessage('Sorry, an error occurred. Please try again later.', 'bot');
+            }
+        };
+        /* Business modal */
+        document.getElementById('businessBtn').onclick = () => bizModal.style.display = 'flex';
+        document.getElementById('bizClose').onclick = () => bizModal.style.display = 'none';
+        document.getElementById('bizCreate').onclick = async () => {
+            const payload = {
+                name: document.getElementById('biz_name').value,
+                email: document.getElementById('biz_email').value,
+                phone: document.getElementById('biz_phone').value,
+                type: document.getElementById('biz_type').value,
+                categories: document.getElementById('biz_cat').value.split(',').map(s => s.trim()).filter(Boolean),
+                address: document.getElementById('biz_addr').value
+            };
+            const bizMsg = document.getElementById('bizMsg');
+            bizMsg.innerText = 'Creating account...';
+            try {
+                const r = await fetch(API_BASE + '/business/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const j = await r.json();
+                if (r.ok && j.payment_url) {
+                    bizMsg.innerText = 'Account created. Redirecting to payment...';
+                    window.location.href = j.payment_url;
+                } else if (r.ok) {
+                    bizMsg.innerText = 'Signup created. Awaiting payment instructions.';
+                } else {
+                    bizMsg.innerText = 'Error: ' + (j.error || 'unknown');
+                }
+            } catch (err) {
+                bizMsg.innerText = 'Error: Could not connect to the server.';
+            }
+        };
+    </script>
+        <!-- Register service worker -->
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js")
+                .then(() => console.log("SW registered"))
+                .catch(err => console.error("SW failed", err));
+        }
+    </script>
+</body>
+
+</html>
