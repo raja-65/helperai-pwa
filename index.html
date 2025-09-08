@@ -214,52 +214,57 @@
             /* ---------- update API_BASE below with your API endpoint after you create API ---------- */
             const API_BASE = "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod"; // e.g. https://abc123.execute-api.region.amazonaws.com/prod
 
-            document.getElementById("sendBtn").onclick = async () => {
-                    const input = document.getElementById("prompt");
-                    const text = input.value.trim();
-                    if (!text) return;
+             // Chat
+                const chat = document.getElementById('chat');
+                const promptInput = document.getElementById('prompt');
+                const sendBtn = document.getElementById('sendBtn');
 
-                    // add user message to chat
-                    const chat = document.getElementById("chat");
-                    const u = document.createElement("div");
-                    u.className = "msg user";
-                    u.innerText = text;
-                    chat.appendChild(u);
+                function addMessage(text, who = 'bot') {
+                    const d = document.createElement('div');
+                    d.className = 'msg ' + (who === 'user' ? 'user' : 'bot');
+                    d.innerHTML = text;
+                    chat.appendChild(d);
                     chat.scrollTop = chat.scrollHeight;
-                    input.value = "";
-
-                    // show loader
-                    const loader = document.createElement("div");
-                    loader.className = "msg bot";
-                    loader.innerHTML = '<div class="loader"></div>';
-                    chat.appendChild(loader);
-                    chat.scrollTop = chat.scrollHeight;
-
-                    try {
-                        const resp = await fetch(API_BASE + "/chat", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ prompt: text, session_id: "web1" })
-                        });
-                        const data = await resp.json();
-                        loader.innerText = data.answer || "No response";
-                    } catch (e) {
-                        loader.innerText = "Error: " + e.message;
-                    }
-            document.getElementById('businessBtn').onclick = () => document.getElementById('bizModal').style.display = 'block';
-            document.getElementById('bizClose').onclick = () => document.getElementById('bizModal').style.display = 'none';
-
-            document.getElementById('useLocationBtn').onclick = async () => {
-                document.getElementById('bizMsg').innerText = 'Getting location…';
-                try {
-                    const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 7000 }));
-                    document.getElementById('biz_lat').value = pos.coords.latitude;
-                    document.getElementById('biz_lon').value = pos.coords.longitude;
-                    document.getElementById('bizMsg').innerText = 'Location filled';
-                } catch (e) {
-                    document.getElementById('bizMsg').innerText = 'Could not get location. Please allow location or enter manually.';
                 }
-            };
+
+                sendBtn.onclick = async () => {
+                    const text = promptInput.value.trim();
+                    if (!text) return;
+                    addMessage(text, 'user');
+                    promptInput.value = '';
+                    addMessage('Thinking...', 'bot');
+
+                    let loc = null;
+                    try {
+                        const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000 }));
+                        loc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+                    } catch (e) { }
+
+                    const payload = { prompt: text, lat: loc?.lat, lon: loc?.lon };
+                    const res = await fetch(API_BASE + '/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    const data = await res.json();
+
+                    // remove last "Thinking..."
+                    const msgs = Array.from(document.getElementsByClassName('msg'));
+                    if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
+
+                    addMessage(data.answer || "No response", 'bot');
+                };
+
+                // Modal logic
+                document.getElementById('businessBtn').onclick = () => document.getElementById('bizModal').style.display = 'flex';
+                document.getElementById('bizClose').onclick = () => document.getElementById('bizModal').style.display = 'none';
+                document.getElementById('useLocationBtn').onclick = async () => {
+                    document.getElementById('bizMsg').innerText = 'Getting location…';
+                    try {
+                        const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 7000 }));
+                        document.getElementById('biz_lat').value = pos.coords.latitude;
+                        document.getElementById('biz_lon').value = pos.coords.longitude;
+                        document.getElementById('bizMsg').innerText = 'Location filled';
+                    } catch (e) {
+                        document.getElementById('bizMsg').innerText = 'Could not get location. Enter manually.';
+                    }
+                };
 
             document.getElementById('bizCreate').onclick = async () => {
                 document.getElementById('bizMsg').innerText = 'Creating signup...';
