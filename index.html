@@ -180,116 +180,114 @@
     </div>
     <div id="bizModal">
         <div class="content">
+        <!-- Business modal (replace your existing biz modal) -->
             <h3>Business Signup</h3>
-            <label>Name <input id="biz_name" type="text" /></label>
-            <label>Email <input id="biz_email" type="email" /></label>
-            <label>Phone <input id="biz_phone" type="tel" /></label>
-            <label>Type <select id="biz_type">
-                    <option value="local">Local</option>
-                    <option value="global">Global</option>
-                </select></label>
-            <label>Categories <input id="biz_cat" type="text" placeholder="e.g., food, services" /></label>
-            <label>Address <input id="biz_addr" type="text" /></label>
-            <div style="margin-top:16px; text-align: right;">
-                <button id="bizClose">Close</button>
-                <button id="bizCreate">Create & Pay</button>
+            <label>Name <input id="biz_name" placeholder="Shop name" /></label><br>
+            <label>Email <input id="biz_email" placeholder="owner@example.com" /></label><br>
+            <label>Phone <input id="biz_phone" placeholder="10-digit number" /></label><br>
+            <label>Type
+                <select id="biz_type">
+                    <option>local</option>
+                    <option>global</option>
+                </select>
+            </label><br>
+            <label>Categories <input id="biz_cat" placeholder="e.g., food,services" /></label><br>
+            <label>Address (optional) <input id="biz_addr" placeholder="Street or landmark" /></label><br>
+            <label>Latitude (optional) <input id="biz_lat" placeholder="e.g., 24.8607" /></label><br>
+            <label>Longitude (optional) <input id="biz_lon" placeholder="e.g., 67.0011" /></label><br>
+            <label>Website (optional) <input id="biz_site" placeholder="https://example.com" /></label><br>
+        
+            <div style="margin-top:8px; display:flex; gap:8px;">
+                <button id="useLocationBtn">Auto-fill my location</button>
+                <button id="bizCreate">Create & Pay ₹2000</button>
+                <button id="bizClose" style="background:#ccc;">Close</button>
             </div>
-            <div id="bizMsg" style="font-size:13px;color:#444;margin-top:12px"></div>
+            <div id="bizMsg" style="font-size:13px;color:#444;margin-top:8px"></div>
         </div>
-    </div>
-    <script>
-        const API_BASE = "https://your-api-gateway-url.amazonaws.com"; // <-- Replace with your deployed API URL
-        let session_id = localStorage.getItem('session_id') || crypto.randomUUID();
-        localStorage.setItem('session_id', session_id);
-        const chat = document.getElementById('chat');
-        const promptInput = document.getElementById('prompt');
-        const sendBtn = document.getElementById('sendBtn');
-        const bizModal = document.getElementById('bizModal');
-        function addMessage(text, who = 'bot') {
-            const d = document.createElement('div');
-            d.className = 'msg ' + who;
-            d.innerHTML = text;
-            chat.appendChild(d);
-            chat.scrollTop = chat.scrollHeight;
-        }
-        promptInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendBtn.click();
-        });
-        sendBtn.onclick = async () => {
-            const text = promptInput.value.trim();
-            if (!text) return;
-            addMessage(text, 'user');
-            promptInput.value = '';
-            addMessage('<div class="loader"></div> Thinking...', 'bot');
-            let loc = null;
-            try {
-                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000 }));
-                loc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
-            } catch (e) {
-                console.error("Geolocation error: ", e);
-                addMessage('Could not get your location.', 'bot');
-            }
-            const payload = { session_id, prompt: text, lat: loc?.lat, lon: loc?.lon };
-            try {
-                const res = await fetch(API_BASE + '/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-                const msgs = Array.from(document.getElementsByClassName('msg'));
-                if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
-                let answerHtml = data.answer || "No response";
-                if (data.tools_used && data.tools_used.length > 0) answerHtml += '<div style="font-size:12px;color:#666;margin-top:8px">Sourced from live web</div>';
-                addMessage(answerHtml, 'bot');
-                if (data.business_recommendations && data.business_recommendations.length) {
-                    data.business_recommendations.forEach(b => {
-                        const card = document.createElement('div');
-                        card.className = 'biz-card';
-                        card.innerHTML = `<strong>${b.name}</strong><div>${b.address || ''}</div><div>${b.distance_m ? Math.round(b.distance_m) + ' m away' : ''}</div><div style="margin-top:8px; display: flex; gap: 8px;"><a href="tel:${b.phone}" class="btn">Call</a> <a href="https://www.google.com/maps/search/?api=1&query=${b.lat},${b.lon}" target="_blank" class="btn">Directions</a></div>`;
-                        chat.appendChild(card);
-                    });
-                    chat.scrollTop = chat.scrollHeight;
+        
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+            /* ---------- update API_BASE below with your API endpoint after you create API ---------- */
+            const API_BASE = "REPLACE_WITH_YOUR_API_URL"; // e.g. https://abc123.execute-api.region.amazonaws.com/prod
+
+            document.getElementById('businessBtn').onclick = () => document.getElementById('bizModal').style.display = 'block';
+            document.getElementById('bizClose').onclick = () => document.getElementById('bizModal').style.display = 'none';
+
+            document.getElementById('useLocationBtn').onclick = async () => {
+                document.getElementById('bizMsg').innerText = 'Getting location…';
+                try {
+                    const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 7000 }));
+                    document.getElementById('biz_lat').value = pos.coords.latitude;
+                    document.getElementById('biz_lon').value = pos.coords.longitude;
+                    document.getElementById('bizMsg').innerText = 'Location filled';
+                } catch (e) {
+                    document.getElementById('bizMsg').innerText = 'Could not get location. Please allow location or enter manually.';
                 }
-            } catch (err) {
-                console.error("API call error: ", err);
-                addMessage('Sorry, an error occurred. Please try again later.', 'bot');
-            }
-        };
-        /* Business modal */
-        document.getElementById('businessBtn').onclick = () => bizModal.style.display = 'flex';
-        document.getElementById('bizClose').onclick = () => bizModal.style.display = 'none';
-        document.getElementById('bizCreate').onclick = async () => {
-            const payload = {
-                name: document.getElementById('biz_name').value,
-                email: document.getElementById('biz_email').value,
-                phone: document.getElementById('biz_phone').value,
-                type: document.getElementById('biz_type').value,
-                categories: document.getElementById('biz_cat').value.split(',').map(s => s.trim()).filter(Boolean),
-                address: document.getElementById('biz_addr').value
             };
-            const bizMsg = document.getElementById('bizMsg');
-            bizMsg.innerText = 'Creating account...';
-            try {
-                const r = await fetch(API_BASE + '/business/signup', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const j = await r.json();
-                if (r.ok && j.payment_url) {
-                    bizMsg.innerText = 'Account created. Redirecting to payment...';
-                    window.location.href = j.payment_url;
-                } else if (r.ok) {
-                    bizMsg.innerText = 'Signup created. Awaiting payment instructions.';
-                } else {
-                    bizMsg.innerText = 'Error: ' + (j.error || 'unknown');
+
+            document.getElementById('bizCreate').onclick = async () => {
+                document.getElementById('bizMsg').innerText = 'Creating signup...';
+                const payload = {
+                    name: document.getElementById('biz_name').value,
+                    email: document.getElementById('biz_email').value,
+                    phone: document.getElementById('biz_phone').value,
+                    type: document.getElementById('biz_type').value,
+                    categories: document.getElementById('biz_cat').value,
+                    address: document.getElementById('biz_addr').value,
+                    lat: document.getElementById('biz_lat').value || null,
+                    lon: document.getElementById('biz_lon').value || null,
+                    website: document.getElementById('biz_site').value || null
+                };
+
+                // simple validation
+                if (!payload.name || !payload.phone || !payload.email) {
+                    document.getElementById('bizMsg').innerText = 'Please enter Name, Phone, Email.';
+                    return;
                 }
-            } catch (err) {
-                bizMsg.innerText = 'Error: Could not connect to the server.';
-            }
-        };
-    </script>
+
+                // call backend to create business record and razorpay order
+                try {
+                    const resp = await fetch(API_BASE + '/business/signup', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                    });
+                    const j = await resp.json();
+                    if (!j || !j.order_id) {
+                        document.getElementById('bizMsg').innerText = 'Server error creating order: ' + (j?.error || 'unknown');
+                        return;
+                    }
+
+                    // open Razorpay Checkout with returned order_id and key
+                    const options = {
+                        key: j.razorpay_key, // razorpay key id from server
+                        order_id: j.order_id,
+                        name: payload.name,
+                        description: 'Business subscription ₹2000 / month',
+                        handler: async function (razorResp) {
+                            // razorResp contains razorpay_payment_id, razorpay_order_id, razorpay_signature
+                            document.getElementById('bizMsg').innerText = 'Verifying payment...';
+                            // send payment id to server to verify & activate business
+                            const verify = await fetch(API_BASE + '/business/verify_payment', {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ razorpay_payment_id: razorResp.razorpay_payment_id, business_id: j.business_id })
+                            });
+                            const v = await verify.json();
+                            if (v && v.ok) {
+                                document.getElementById('bizMsg').innerText = 'Payment successful. Your business is active for 30 days.';
+                            } else {
+                                document.getElementById('bizMsg').innerText = 'Payment verification failed. Contact support.';
+                            }
+                        },
+                        prefill: { name: payload.name, email: payload.email, contact: payload.phone },
+                        theme: { color: "#0b5" }
+                    };
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+                } catch (e) {
+                    document.getElementById('bizMsg').innerText = 'Network/server error: ' + e.message;
+                }
+            };
+        </script>
+
         <!-- Register service worker -->
     <script>
         if ("serviceWorker" in navigator) {
