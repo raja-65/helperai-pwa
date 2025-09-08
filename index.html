@@ -108,8 +108,12 @@
             inset: 0;
             background: rgba(0, 0, 0, 0.6);
             z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            display: flex;              /* make it flex */
+            justify-content: center;    /* center horizontally */
+            align-items: center;        /* center vertically */
+            overflow-y: auto;           /* scroll if form too long */
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         #bizModal .content {
@@ -210,6 +214,38 @@
             /* ---------- update API_BASE below with your API endpoint after you create API ---------- */
             const API_BASE = "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod"; // e.g. https://abc123.execute-api.region.amazonaws.com/prod
 
+            document.getElementById("sendBtn").onclick = async () => {
+                    const input = document.getElementById("prompt");
+                    const text = input.value.trim();
+                    if (!text) return;
+
+                    // add user message to chat
+                    const chat = document.getElementById("chat");
+                    const u = document.createElement("div");
+                    u.className = "msg user";
+                    u.innerText = text;
+                    chat.appendChild(u);
+                    chat.scrollTop = chat.scrollHeight;
+                    input.value = "";
+
+                    // show loader
+                    const loader = document.createElement("div");
+                    loader.className = "msg bot";
+                    loader.innerHTML = '<div class="loader"></div>';
+                    chat.appendChild(loader);
+                    chat.scrollTop = chat.scrollHeight;
+
+                    try {
+                        const resp = await fetch(API_BASE + "/chat", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ prompt: text, session_id: "web1" })
+                        });
+                        const data = await resp.json();
+                        loader.innerText = data.answer || "No response";
+                    } catch (e) {
+                        loader.innerText = "Error: " + e.message;
+                    }
             document.getElementById('businessBtn').onclick = () => document.getElementById('bizModal').style.display = 'block';
             document.getElementById('bizClose').onclick = () => document.getElementById('bizModal').style.display = 'none';
 
