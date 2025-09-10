@@ -277,67 +277,68 @@
             }
         };
 
-        document.getElementById('bizCreate').onclick = async () => {
-            document.getElementById('bizMsg').innerText = 'Creating signup...';
-            const payload = {
-                name: document.getElementById('biz_name').value,
-                email: document.getElementById('biz_email').value,
-                phone: document.getElementById('biz_phone').value,
-                type: document.getElementById('biz_type').value,
-                categories: document.getElementById('biz_cat').value,
-                address: document.getElementById('biz_addr').value,
-                lat: document.getElementById('biz_lat').value || null,
-                lon: document.getElementById('biz_lon').value || null,
-                website: document.getElementById('biz_site').value || null
-            };
+        
+            document.getElementById('bizCreate').onclick = async () => {
+                document.getElementById('bizMsg').innerText = 'Creating signup...';
+                const payload = {
+                    name: document.getElementById('biz_name').value,
+                    email: document.getElementById('biz_email').value,
+                    phone: document.getElementById('biz_phone').value,
+                    type: document.getElementById('biz_type').value,
+                    categories: document.getElementById('biz_cat').value,
+                    address: document.getElementById('biz_addr').value,
+                    lat: document.getElementById('biz_lat').value || null,
+                    lon: document.getElementById('biz_lon').value || null,
+                    website: document.getElementById('biz_site').value || null
+                };
 
-            // simple validation
-            if (!payload.name || !payload.phone || !payload.email) {
-                document.getElementById('bizMsg').innerText = 'Please enter Name, Phone, Email.';
-                return;
-            }
-
-            // call backend to create business record and razorpay order
-            try {
-                const resp = await fetch(API_BASE + '/business/signup', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
-                });
-                const j = await resp.json();
-                if (!j || !j.order_id) {
-                    document.getElementById('bizMsg').innerText = 'Server error creating order: ' + (j?.error || 'unknown');
+                // simple validation
+                if (!payload.name || !payload.phone || !payload.email) {
+                    document.getElementById('bizMsg').innerText = 'Please enter Name, Phone, Email.';
                     return;
                 }
 
-                // open Razorpay Checkout with returned order_id and key
-                const options = {
-                    key: j.razorpay_key, // razorpay key id from server
-                    order_id: j.order_id,
-                    name: payload.name,
-                    description: 'Business subscription ₹2000 / month',
-                    handler: async function (razorResp) {
-                        // razorResp contains razorpay_payment_id, razorpay_order_id, razorpay_signature
-                        document.getElementById('bizMsg').innerText = 'Verifying payment...';
-                        // send payment id to server to verify & activate business
-                        const verify = await fetch(API_BASE + '/business/verify_payment', {
-                            method: 'POST', headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ razorpay_payment_id: razorResp.razorpay_payment_id, business_id: j.business_id })
-                        });
-                        const v = await verify.json();
-                        if (v && v.ok) {
-                            document.getElementById('bizMsg').innerText = 'Payment successful. Your business is active for 30 days.';
-                        } else {
-                            document.getElementById('bizMsg').innerText = 'Payment verification failed. Contact support.';
-                        }
-                    },
-                    prefill: { name: payload.name, email: payload.email, contact: payload.phone },
-                    theme: { color: "#0b5" }
-                };
-                const rzp = new Razorpay(options);
-                rzp.open();
-            } catch (e) {
-                document.getElementById('bizMsg').innerText = 'Network/server error: ' + e.message;
-            }
-        };
+                // call backend to create business record and razorpay order
+                try {
+                    const resp = await fetch(API_BASE + '/business/signup', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                    });
+                    const j = await resp.json();
+                    if (!j || !j.order_id) {
+                        document.getElementById('bizMsg').innerText = 'Server error creating order: ' + (j?.error || 'unknown');
+                        return;
+                    }
+
+                    // open Razorpay Checkout with returned order_id and key
+                    const options = {
+                        key: j.razorpay_key, // razorpay key id from server
+                        order_id: j.order_id,
+                        name: payload.name,
+                        description: 'Business subscription ₹2000 / month',
+                        handler: async function (razorResp) {
+                            // razorResp contains razorpay_payment_id, razorpay_order_id, razorpay_signature
+                            document.getElementById('bizMsg').innerText = 'Verifying payment...';
+                            // send payment id to server to verify & activate business
+                            const verify = await fetch(API_BASE + '/business/verify_payment', {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ razorpay_payment_id: razorResp.razorpay_payment_id, business_id: j.business_id })
+                            });
+                            const v = await verify.json();
+                            if (v && v.ok) {
+                                document.getElementById('bizMsg').innerText = 'Payment successful. Your business is active for 30 days.';
+                            } else {
+                                document.getElementById('bizMsg').innerText = 'Payment verification failed. Contact support.';
+                            }
+                        },
+                        prefill: { name: payload.name, email: payload.email, contact: payload.phone },
+                        theme: { color: "#0b5" }
+                    };
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+                } catch (e) {
+                    document.getElementById('bizMsg').innerText = 'Network/server error: ' + e.message;
+                }
+            };
     </script>
 
             <!-- Register service worker -->
