@@ -199,6 +199,35 @@
                 .catch(err => console.error("SW failed", err));
         }
     </script>
+    <script>
+    let deferredPrompt;
+    window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const btn = document.createElement("button");
+        btn.textContent = "Install App";
+        btn.className = "install-btn";
+        btn.onclick = async () => {
+            btn.style.display = "none";
+            deferredPrompt.prompt();
+            const choice = await deferredPrompt.userChoice;
+            if (choice.outcome !== "accepted") btn.style.display = "block";
+        };
+        document.body.appendChild(btn);
+    });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+    function addMessage(text, who = 'bot', format = 'text') {
+        const d = document.createElement('div');
+        d.className = 'msg ' + (who === 'user' ? 'user' : 'bot');
+        d.innerHTML = (format === 'markdown') ? marked.parse(text) : text;
+        chat.appendChild(d);
+        chat.scrollTop = chat.scrollHeight;
+    }
+    </script>
+
+
 </body>
 
 </html>
