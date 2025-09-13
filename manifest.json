@@ -9,5 +9,9 @@
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0b5",
-  "description": "Real-time AI chat with local recommendations"
+  "description": "Real-time AI chat with local recommendations",
+  "orientation": "portrait-primary",
+  "scope": "./",
+  "categories": ["utilities", "productivity"],
+  "prefer_related_applications": false
 }
