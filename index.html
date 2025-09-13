@@ -75,29 +75,41 @@
             chat.scrollTop = chat.scrollHeight;
         }
 
-        sendBtn.onclick = async () => {
-            const text = promptInput.value.trim();
-            if (!text) return;
-            addMessage(text, 'user');
-            promptInput.value = '';
-            addMessage('Thinking...', 'bot');
+    // Store session_id in browser localStorage
+    let sessionId = localStorage.getItem("session_id");
+    if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        localStorage.setItem("session_id", sessionId);
+    }
 
-            let loc = null;
-            try {
-                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000 }));
-                loc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
-            } catch (e) { }
+    sendBtn.onclick = async () => {
+        const text = promptInput.value.trim();
+        if (!text) return;
+        addMessage(text, 'user');
+        promptInput.value = '';
+        addMessage('Thinking...', 'bot');
 
-            const payload = { prompt: text, lat: loc?.lat, lon: loc?.lon };
-            const res = await fetch(API_BASE + '/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-            const data = await res.json();
+        let loc = null;
+        try {
+            const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000 }));
+            loc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+        } catch (e) { }
 
-            // remove last "Thinking..."
-            const msgs = Array.from(document.getElementsByClassName('msg'));
-            if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
+        const payload = { session_id: sessionId, prompt: text, lat: loc?.lat, lon: loc?.lon };
+        const res = await fetch(API_BASE + '/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
 
-            addMessage(data.answer || "No response", 'bot');
-        };
+        // remove last "Thinking..."
+        const msgs = Array.from(document.getElementsByClassName('msg'));
+        if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
+
+        addMessage(data.answer || "No response", 'bot');
+    };
+
 
         // Modal logic
         document.getElementById('businessBtn').onclick = () => document.getElementById('bizModal').style.display = 'flex';
