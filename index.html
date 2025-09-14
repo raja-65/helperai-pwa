@@ -71,6 +71,18 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
        
     <script>
+        const menu = document.getElementById("menu");
+        const menuBtn = document.getElementById("menuBtn");
+        let open = false;
+        menuBtn.onclick = () => {
+          open = !open;
+          menu.style.display = open ? "block" : "none";
+        };
+    </script>
+
+
+
+    <script>
         /* ---------- update API_BASE below with your API endpoint after you create API ---------- */
         const API_BASE = "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod"; // e.g. https://abc123.execute-api.region.amazonaws.com/prod
 
