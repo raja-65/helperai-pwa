@@ -1,5 +1,5 @@
 const CACHE_NAME = "helperai-static-v2";
-const STATIC_FILES = ["index.html", "manifest.json", "logo.png", "style.css"];
+const STATIC_FILES = ["index.html", "manifest.json", "logo.png", "style.css", "about.html", "contact.html", "privacy.html", "pricing.html", "refund.html", "shipping.html", "terms.html"];
 
 self.addEventListener("install", evt => {
   evt.waitUntil(
