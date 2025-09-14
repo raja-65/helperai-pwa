@@ -1,17 +1,12 @@
 {
   "name": "HelperAI",
   "short_name": "HelperAI",
-  "icons": [
-    { "src": "logo.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "logo.png", "sizes": "512x512", "type": "image/png" }
-  ],
-  "start_url": "./index.html",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0b5",
-  "description": "Real-time AI chat with local recommendations",
-  "orientation": "portrait-primary",
-  "scope": "./",
-  "categories": ["utilities", "productivity"],
-  "prefer_related_applications": false
+  "icons": [
+    { "src": "logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "logo.png", "sizes": "512x512", "type": "image/png" }
+  ]
 }
