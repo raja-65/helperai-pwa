@@ -1,20 +1,14 @@
 {
   "name": "HelperAI",
   "short_name": "HelperAI",
-  "start_url": "index.html",
+  "start_url": "/helperai-pwa/",
+  "scope": "/helperai-pwa/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0b5",
+  "description": "Real-time AI chat with local recommendations",
   "icons": [
-    {
-      "src": "logo.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "logo.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "/helperai-pwa/logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/helperai-pwa/logo.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
