@@ -218,13 +218,17 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-    function addMessage(text, who = 'bot', format = 'text') {
-        const d = document.createElement('div');
-        d.className = 'msg ' + (who === 'user' ? 'user' : 'bot');
-        d.innerHTML = (format === 'markdown') ? marked.parse(text) : text;
-        chat.appendChild(d);
-        chat.scrollTop = chat.scrollHeight;
-    }
+        function addMessage(text, who = 'bot') {
+            const d = document.createElement('div');
+            d.className = 'msg ' + (who === 'user' ? 'user' : 'bot');
+            if (who === 'bot') {
+                d.innerHTML = marked.parse(text); // render markdown
+            } else {
+                d.textContent = text; // user messages stay plain
+            }
+            chat.appendChild(d);
+            chat.scrollTop = chat.scrollHeight;
+        }
     </script>
 
 
