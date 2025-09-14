@@ -1,0 +1,6 @@
+- [x] Create style.css with improved, responsive styling
+- [x] Update index.html to link style.css and clean up formatting
+- [x] Update manifest.json with additional fields for better installability
+- [x] Update sw.js with runtime caching and offline support
+- [ ] Clean up HTML formatting in index.html
+- [ ] Test the PWA locally
