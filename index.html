@@ -218,11 +218,11 @@
        
     <script>
         
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/helperai-pwa/sw.js', { scope: '/helperai-pwa/' })
-        .then(() => console.log('SW registered with scope /helperai-pwa/'))
-        .catch(err => console.error('SW failed', err));
-    }
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/helperai-pwa/sw.js', { scope: '/helperai-pwa/' })
+            .then(() => console.log('SW registered with scope /helperai-pwa/'))
+            .catch(err => console.error('SW failed', err));
+        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
