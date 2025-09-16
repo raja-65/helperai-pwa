@@ -295,7 +295,24 @@ button:active {
   animation: bounce 2s infinite;
 }
 
-/* Menu styles */
+#menu {
+  display: none;
+  /* hidden by default */
+  position: fixed;
+  /* take it out of the normal flow */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* center horizontally & vertically */
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius);
+  padding: 20px;
+  z-index: 100;
+  /* make sure it’s above other elements */
+}
+
+/* Menu styles *//*
 #menu {
   background: white;
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
@@ -324,7 +341,7 @@ button:active {
   font-size: 18px;
   box-shadow: var(--shadow);
   z-index: 101;
-}
+}*/
 
 /* Responsive design */
 @media (max-width: 768px) {
