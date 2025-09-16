@@ -4,8 +4,8 @@ const CACHE_URLS = [
   '/helperai-pwa/',
   '/helperai-pwa/index.html',
   '/helperai-pwa/business-login.html',
-  '/helperai-pwa/dashboard.html',
-  //'/helperai-pwa/style.css',
+  //'/helperai-pwa/dashboard.html',
+  '/helperai-pwa/style.css',
   '/helperai-pwa/manifest.json',
   '/helperai-pwa/logo.png',
   // Add your icon files
