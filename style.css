@@ -1,15 +1,56 @@
+/* style.css - Mobile-First PWA Optimized Styles */
+
+/* CSS Variables for theming */
 :root {
-  --primary-color: #0a140e;
-  --primary-hover: #e9f5ee;
-  --secondary-color: #111412;
-  --background-color: #f6f7f9;
-  --card-background: #fff;
-  --text-color: #333;
-  --border-color: #eee;
-  --shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  --border-radius: 12px;
-  --transition: 0.2s ease;
+  --primary-color: #00bb55;
+  --primary-dark: #009944;
+  --secondary-color: #f8f9fa;
+  --text-color: #2d3436;
+  --text-light: #636e72;
+  --border-color: #ddd;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --radius: 8px;
+  --header-height: 60px;
 }
+
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background: var(--secondary-color);
+  overflow-x: hidden;
+  /* Prevent iOS safari zoom on input focus */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* PWA specific styles */
+body.pwa-display-standalone {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Header styles */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background: white;
+  border-
 
 * {
   box-sizing: border-box;
@@ -323,4 +364,8 @@ main {
   #bizModal label {
     font-size: 14px;
   }
+}bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+  z-index: 1000;
+  padding: 0 16px;
 }

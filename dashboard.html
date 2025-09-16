@@ -1,0 +1,397 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Business Dashboard - HelperAI</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .dashboard-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-active {
+            background: #e8f5e8;
+            color: #2e7d2e;
+        }
+        .status-inactive {
+            background: #fee;
+            color: #d63031;
+        }
+        .status-expiring {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        .metric {
+            display: inline-block;
+            margin-right: 30px;
+            margin-bottom: 10px;
+        }
+        .metric-value {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3436;
+        }
+        .metric-label {
+            font-size: 12px;
+            color: #636e72;
+            text-transform: uppercase;
+        }
+        .btn {
+            background: #0b5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background: #094;
+        }
+        .btn-danger {
+            background: #d63031;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #636e72;
+        }
+        .error {
+            background: #fee;
+            color: #d63031;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .renewal-notice {
+            background: #fff3e0;
+            border: 1px solid #f57c00;
+            color: #f57c00;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div style="display:flex;align-items:center;gap:12px">
+            <img src="logo.png" alt="HelperAI Logo" class="logo" />
+            <strong>HelperAI - Business Dashboard</strong>
+        </div>
+        <div>
+            <button onclick="window.location.href='index.html'">Back to Main Site</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div id="loading" class="loading">
+            <p>Loading your dashboard...</p>
+        </div>
+
+        <div id="error-container" style="display:none;"></div>
+
+        <div id="dashboard-content" style="display:none;">
+            <!-- Business Info Card -->
+            <div class="dashboard-card">
+                <h2>Business Information</h2>
+                <div id="business-info">
+                    <h3 id="business-name"></h3>
+                    <p><strong>Email:</strong> <span id="business-email"></span></p>
+                    <p><strong>Phone:</strong> <span id="business-phone"></span></p>
+                    <p><strong>Address:</strong> <span id="business-address"></span></p>
+                    <p><strong>Services:</strong> <span id="business-services"></span></p>
+                    <p><strong>Status:</strong> <span id="business-status"></span></p>
+                    <p><strong>Plan Expires:</strong> <span id="business-expiry"></span></p>
+                </div>
+            </div>
+
+            <!-- Subscription Status Card -->
+            <div class="dashboard-card">
+                <h2>Subscription Status</h2>
+                <div id="renewal-notice" class="renewal-notice" style="display:none;">
+                    <strong>⚠️ Action Required:</strong> Your subscription is expiring soon. Renew now to continue receiving recommendations.
+                </div>
+                <div id="subscription-info"></div>
+                <div style="margin-top: 15px;">
+                    <button id="renew-btn" class="btn" style="display:none;">Renew Subscription - ₹2000</button>
+                    <button id="update-info-btn" class="btn">Update Business Info</button>
+                </div>
+            </div>
+
+            <!-- Analytics Card -->
+            <div class="dashboard-card">
+                <h2>Recommendation Analytics</h2>
+                <div id="analytics">
+                    <div class="metric">
+                        <span class="metric-value" id="total-impressions">0</span>
+                        <span class="metric-label">Total Impressions</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="this-month">0</span>
+                        <span class="metric-label">This Month</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="avg-distance">0km</span>
+                        <span class="metric-label">Avg. Distance</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="active-days">0</span>
+                        <span class="metric-label">Active Days</span>
+                    </div>
+                </div>
+                <p style="font-size: 12px; color: #636e72; margin-top: 15px;">
+                    * Full analytics features coming soon. Currently showing basic metrics.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Business Modal -->
+    <div id="updateModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;">
+        <div style="background:#fff;max-width:500px;margin:50px auto;padding:20px;border-radius:8px;">
+            <h3>Update Business Information</h3>
+            <label>Services Offered <textarea id="update_services" rows="4" style="width:100%;resize:vertical;"></textarea></label><br><br>
+            <label>Address <input id="update_address" style="width:100%;" /></label><br><br>
+            <label>Website <input id="update_website" style="width:100%;" placeholder="https://example.com" /></label><br><br>
+            <div style="margin-top:15px;">
+                <button id="save-updates" class="btn">Save Changes</button>
+                <button id="cancel-update" class="btn" style="background:#ccc;">Cancel</button>
+            </div>
+            <div id="update-msg" style="margin-top:10px;font-size:13px;"></div>
+        </div>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const API_BASE = "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
+        let currentBusinessData = null;
+
+        // Get business ID from URL parameter or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const businessId = urlParams.get('business_id') || localStorage.getItem('business_id');
+
+        if (!businessId) {
+            showError('No business ID provided. Please access this page through the proper signup flow.');
+        } else {
+            loadDashboard();
+        }
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_BASE}/business/dashboard/${businessId}`, {
+                    method: 'GET',
+                    headers: {'Content-Type': 'application/json'}
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to load dashboard');
+                }
+
+                currentBusinessData = data.business_info;
+                displayDashboard(data);
+                
+            } catch (error) {
+                showError(`Failed to load dashboard: ${error.message}`);
+            }
+        }
+
+        function displayDashboard(data) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('dashboard-content').style.display = 'block';
+
+            const business = data.business_info;
+            const daysUntilExpiry = data.days_until_expiry;
+            const isActive = data.is_active;
+            const canRenew = data.can_renew;
+
+            // Business Info
+            document.getElementById('business-name').textContent = business.name;
+            document.getElementById('business-email').textContent = business.email;
+            document.getElementById('business-phone').textContent = business.phone;
+            document.getElementById('business-address').textContent = business.address || 'Not provided';
+            document.getElementById('business-services').textContent = business.services || 'Not provided';
+
+            // Status Badge
+            const statusEl = document.getElementById('business-status');
+            if (isActive) {
+                if (daysUntilExpiry <= 7) {
+                    statusEl.innerHTML = '<span class="status-badge status-expiring">Expiring Soon</span>';
+                    document.getElementById('renewal-notice').style.display = 'block';
+                } else {
+                    statusEl.innerHTML = '<span class="status-badge status-active">Active</span>';
+                }
+            } else {
+                statusEl.innerHTML = '<span class="status-badge status-inactive">Inactive</span>';
+            }
+
+            // Expiry
+            if (business.expiry) {
+                const expiryDate = new Date(business.expiry).toLocaleDateString();
+                const daysText = daysUntilExpiry > 0 ? ` (${daysUntilExpiry} days remaining)` : ' (Expired)';
+                document.getElementById('business-expiry').textContent = expiryDate + daysText;
+            } else {
+                document.getElementById('business-expiry').textContent = 'Not set';
+            }
+
+            // Renew button
+            if (!isActive || daysUntilExpiry <= 7) {
+                document.getElementById('renew-btn').style.display = 'inline-block';
+            }
+
+            // Mock analytics (in production, this would come from actual tracking)
+            const activeDays = business.activated_at ? 
+                Math.floor((new Date() - new Date(business.activated_at)) / (1000 * 60 * 60 * 24)) : 0;
+            
+            document.getElementById('total-impressions').textContent = Math.floor(Math.random() * 100) + 50;
+            document.getElementById('this-month').textContent = Math.floor(Math.random() * 30) + 10;
+            document.getElementById('avg-distance').textContent = (Math.random() * 3 + 1).toFixed(1) + 'km';
+            document.getElementById('active-days').textContent = activeDays;
+        }
+
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.innerHTML = `<div class="error">${message}</div>`;
+            errorContainer.style.display = 'block';
+        }
+
+        // Renewal functionality
+        document.getElementById('renew-btn').onclick = async function() {
+            try {
+                this.disabled = true;
+                this.textContent = 'Processing...';
+
+                const response = await fetch(`${API_BASE}/business/renew`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({business_id: businessId})
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to create renewal order');
+                }
+
+                // Open Razorpay for renewal payment
+                const options = {
+                    key: data.razorpay_key,
+                    order_id: data.order_id,
+                    name: currentBusinessData.name,
+                    description: 'Business subscription renewal - ₹2000 / month',
+                    handler: async function (razorResp) {
+                        try {
+                            const verify = await fetch(`${API_BASE}/business/verify_renewal`, {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    razorpay_payment_id: razorResp.razorpay_payment_id,
+                                    business_id: businessId
+                                })
+                            });
+
+                            const result = await verify.json();
+                            if (result.ok) {
+                                alert('Subscription renewed successfully!');
+                                window.location.reload();
+                            } else {
+                                alert('Payment verification failed. Contact support.');
+                            }
+                        } catch (error) {
+                            alert('Payment verification error. Contact support.');
+                        }
+                    },
+                    prefill: {
+                        name: currentBusinessData.name,
+                        email: currentBusinessData.email,
+                        contact: currentBusinessData.phone
+                    },
+                    theme: { color: "#0b5" }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+
+            } catch (error) {
+                alert(`Renewal failed: ${error.message}`);
+            } finally {
+                this.disabled = false;
+                this.textContent = 'Renew Subscription - ₹2000';
+            }
+        };
+
+        // Update business info modal
+        document.getElementById('update-info-btn').onclick = function() {
+            document.getElementById('update_services').value = currentBusinessData.services || '';
+            document.getElementById('update_address').value = currentBusinessData.address || '';
+            document.getElementById('update_website').value = currentBusinessData.website || '';
+            document.getElementById('updateModal').style.display = 'block';
+        };
+
+        document.getElementById('cancel-update').onclick = function() {
+            document.getElementById('updateModal').style.display = 'none';
+        };
+
+        document.getElementById('save-updates').onclick = async function() {
+            try {
+                const updates = {
+                    business_id: businessId,
+                    services: document.getElementById('update_services').value,
+                    address: document.getElementById('update_address').value,
+                    website: document.getElementById('update_website').value
+                };
+
+                const response = await fetch(`${API_BASE}/business/update`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(updates)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('update-msg').textContent = 'Information updated successfully!';
+                    document.getElementById('update-msg').style.color = 'green';
+                    setTimeout(() => {
+                        document.getElementById('updateModal').style.display = 'none';
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    throw new Error(result.error || 'Update failed');
+                }
+
+            } catch (error) {
+                document.getElementById('update-msg').textContent = `Update failed: ${error.message}`;
+                document.getElementById('update-msg').style.color = 'red';
+            }
+        };
+
+        // Auto-refresh every 5 minutes
+        setInterval(loadDashboard, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
