@@ -33,6 +33,7 @@ body {
   overflow-x: hidden;
   /* Prevent iOS safari zoom on input focus */
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* PWA specific styles */
