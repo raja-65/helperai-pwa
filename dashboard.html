@@ -5,92 +5,24 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Business Dashboard - HelperAI</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .dashboard-card {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .status-active {
-            background: #e8f5e8;
-            color: #2e7d2e;
-        }
-        .status-inactive {
-            background: #fee;
-            color: #d63031;
-        }
-        .status-expiring {
-            background: #fff3e0;
-            color: #f57c00;
-        }
-        .metric {
-            display: inline-block;
-            margin-right: 30px;
-            margin-bottom: 10px;
-        }
-        .metric-value {
-            display: block;
-            font-size: 24px;
-            font-weight: bold;
-            color: #2d3436;
-        }
-        .metric-label {
-            font-size: 12px;
-            color: #636e72;
-            text-transform: uppercase;
-        }
-        .btn {
-            background: #0b5;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        .btn:hover {
-            background: #094;
-        }
-        .btn-danger {
-            background: #d63031;
-        }
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #636e72;
-        }
-        .error {
-            background: #fee;
-            color: #d63031;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-        .renewal-notice {
-            background: #fff3e0;
-            border: 1px solid #f57c00;
-            color: #f57c00;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
+        .dashboard-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .dashboard-card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+        .status-active { background: #e8f5e8; color: #2e7d2e; }
+        .status-inactive { background: #fee; color: #d63031; }
+        .status-expiring { background: #fff3e0; color: #f57c00; }
+        .metric { display: inline-block; margin-right: 30px; margin-bottom: 10px; }
+        .metric-value { display: block; font-size: 24px; font-weight: bold; color: #2d3436; }
+        .metric-label { font-size: 12px; color: #636e72; text-transform: uppercase; }
+        .btn { background: #0b5; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-right: 10px; }
+        .btn:hover { background: #094; }
+        .btn-danger { background: #d63031; }
+        .btn-danger:hover { background: #c0392b; }
+        .loading { text-align: center; padding: 40px; color: #636e72; }
+        .error { background: #fee; color: #d63031; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+        .renewal-notice { background: #fff3e0; border: 1px solid #f57c00; color: #f57c00; padding: 15px; border-radius: 4px; margin-bottom: 20px; }
     </style>
 </head>
 
@@ -106,10 +38,7 @@
     </header>
 
     <div class="dashboard-container">
-        <div id="loading" class="loading">
-            <p>Loading your dashboard...</p>
-        </div>
-
+        <div id="loading" class="loading"><p>Loading your dashboard...</p></div>
         <div id="error-container" style="display:none;"></div>
 
         <div id="dashboard-content" style="display:none;">
@@ -161,8 +90,11 @@
                         <span class="metric-label">Active Days</span>
                     </div>
                 </div>
+
+                <canvas id="recommendationChart" height="100"></canvas>
+
                 <p style="font-size: 12px; color: #636e72; margin-top: 15px;">
-                    * Full analytics features coming soon. Currently showing basic metrics.
+                    * Full analytics features are active. Metrics shown below are fetched from your real usage data.
                 </p>
             </div>
         </div>
@@ -188,7 +120,6 @@
         const API_BASE = "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
         let currentBusinessData = null;
 
-        // Get business ID from URL parameter or localStorage
         const urlParams = new URLSearchParams(window.location.search);
         const businessId = urlParams.get('business_id') || localStorage.getItem('business_id');
 
@@ -200,23 +131,54 @@
 
         async function loadDashboard() {
             try {
-                const response = await fetch(`${API_BASE}/business/dashboard/${businessId}`, {
-                    method: 'GET',
-                    headers: {'Content-Type': 'application/json'}
-                });
-
+                const response = await fetch(`${API_BASE}/business/dashboard/${businessId}`);
                 const data = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to load dashboard');
-                }
+                if (!response.ok) throw new Error(data.error || 'Failed to load dashboard');
 
                 currentBusinessData = data.business_info;
                 displayDashboard(data);
-                
+                await loadAnalytics();
+
             } catch (error) {
                 showError(`Failed to load dashboard: ${error.message}`);
             }
+        }
+
+        async function loadAnalytics() {
+            try {
+                const resp = await fetch(`${API_BASE}/business/analytics/${businessId}`);
+                const analytics = await resp.json();
+
+                if (!resp.ok) throw new Error(analytics.error || 'Failed to load analytics');
+
+                document.getElementById('total-impressions').textContent = analytics.total_impressions || 0;
+                document.getElementById('this-month').textContent = analytics.monthly_impressions || 0;
+                document.getElementById('avg-distance').textContent = (analytics.avg_distance || 0).toFixed(1) + 'km';
+                document.getElementById('active-days').textContent = analytics.active_days || 0;
+
+                renderChart(analytics.recommendation_trends || []);
+            } catch (err) {
+                console.error("Analytics fetch error:", err);
+            }
+        }
+
+        function renderChart(trends) {
+            const ctx = document.getElementById('recommendationChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: trends.map(t => t.date),
+                    datasets: [{
+                        label: 'Recommendations Shown',
+                        data: trends.map(t => t.count),
+                        borderColor: '#0b5',
+                        backgroundColor: 'rgba(0,181,85,0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: { responsive: true, plugins: { legend: { display: false } } }
+            });
         }
 
         function displayDashboard(data) {
@@ -226,16 +188,13 @@
             const business = data.business_info;
             const daysUntilExpiry = data.days_until_expiry;
             const isActive = data.is_active;
-            const canRenew = data.can_renew;
 
-            // Business Info
             document.getElementById('business-name').textContent = business.name;
             document.getElementById('business-email').textContent = business.email;
             document.getElementById('business-phone').textContent = business.phone;
             document.getElementById('business-address').textContent = business.address || 'Not provided';
             document.getElementById('business-services').textContent = business.services || 'Not provided';
 
-            // Status Badge
             const statusEl = document.getElementById('business-status');
             if (isActive) {
                 if (daysUntilExpiry <= 7) {
@@ -248,7 +207,6 @@
                 statusEl.innerHTML = '<span class="status-badge status-inactive">Inactive</span>';
             }
 
-            // Expiry
             if (business.expiry) {
                 const expiryDate = new Date(business.expiry).toLocaleDateString();
                 const daysText = daysUntilExpiry > 0 ? ` (${daysUntilExpiry} days remaining)` : ' (Expired)';
@@ -257,19 +215,9 @@
                 document.getElementById('business-expiry').textContent = 'Not set';
             }
 
-            // Renew button
             if (!isActive || daysUntilExpiry <= 7) {
                 document.getElementById('renew-btn').style.display = 'inline-block';
             }
-
-            // Mock analytics (in production, this would come from actual tracking)
-            const activeDays = business.activated_at ? 
-                Math.floor((new Date() - new Date(business.activated_at)) / (1000 * 60 * 60 * 24)) : 0;
-            
-            document.getElementById('total-impressions').textContent = Math.floor(Math.random() * 100) + 50;
-            document.getElementById('this-month').textContent = Math.floor(Math.random() * 30) + 10;
-            document.getElementById('avg-distance').textContent = (Math.random() * 3 + 1).toFixed(1) + 'km';
-            document.getElementById('active-days').textContent = activeDays;
         }
 
         function showError(message) {
@@ -279,118 +227,7 @@
             errorContainer.style.display = 'block';
         }
 
-        // Renewal functionality
-        document.getElementById('renew-btn').onclick = async function() {
-            try {
-                this.disabled = true;
-                this.textContent = 'Processing...';
-
-                const response = await fetch(`${API_BASE}/business/renew`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({business_id: businessId})
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to create renewal order');
-                }
-
-                // Open Razorpay for renewal payment
-                const options = {
-                    key: data.razorpay_key,
-                    order_id: data.order_id,
-                    name: currentBusinessData.name,
-                    description: 'Business subscription renewal - ₹2000 / month',
-                    handler: async function (razorResp) {
-                        try {
-                            const verify = await fetch(`${API_BASE}/business/verify_renewal`, {
-                                method: 'POST',
-                                headers: {'Content-Type': 'application/json'},
-                                body: JSON.stringify({
-                                    razorpay_payment_id: razorResp.razorpay_payment_id,
-                                    business_id: businessId
-                                })
-                            });
-
-                            const result = await verify.json();
-                            if (result.ok) {
-                                alert('Subscription renewed successfully!');
-                                window.location.reload();
-                            } else {
-                                alert('Payment verification failed. Contact support.');
-                            }
-                        } catch (error) {
-                            alert('Payment verification error. Contact support.');
-                        }
-                    },
-                    prefill: {
-                        name: currentBusinessData.name,
-                        email: currentBusinessData.email,
-                        contact: currentBusinessData.phone
-                    },
-                    theme: { color: "#0b5" }
-                };
-
-                const rzp = new Razorpay(options);
-                rzp.open();
-
-            } catch (error) {
-                alert(`Renewal failed: ${error.message}`);
-            } finally {
-                this.disabled = false;
-                this.textContent = 'Renew Subscription - ₹2000';
-            }
-        };
-
-        // Update business info modal
-        document.getElementById('update-info-btn').onclick = function() {
-            document.getElementById('update_services').value = currentBusinessData.services || '';
-            document.getElementById('update_address').value = currentBusinessData.address || '';
-            document.getElementById('update_website').value = currentBusinessData.website || '';
-            document.getElementById('updateModal').style.display = 'block';
-        };
-
-        document.getElementById('cancel-update').onclick = function() {
-            document.getElementById('updateModal').style.display = 'none';
-        };
-
-        document.getElementById('save-updates').onclick = async function() {
-            try {
-                const updates = {
-                    business_id: businessId,
-                    services: document.getElementById('update_services').value,
-                    address: document.getElementById('update_address').value,
-                    website: document.getElementById('update_website').value
-                };
-
-                const response = await fetch(`${API_BASE}/business/update`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(updates)
-                });
-
-                const result = await response.json();
-                
-                if (response.ok) {
-                    document.getElementById('update-msg').textContent = 'Information updated successfully!';
-                    document.getElementById('update-msg').style.color = 'green';
-                    setTimeout(() => {
-                        document.getElementById('updateModal').style.display = 'none';
-                        window.location.reload();
-                    }, 1500);
-                } else {
-                    throw new Error(result.error || 'Update failed');
-                }
-
-            } catch (error) {
-                document.getElementById('update-msg').textContent = `Update failed: ${error.message}`;
-                document.getElementById('update-msg').style.color = 'red';
-            }
-        };
-
-        // Auto-refresh every 5 minutes
+        // Auto-refresh every 5 min
         setInterval(loadDashboard, 5 * 60 * 1000);
     </script>
 </body>
