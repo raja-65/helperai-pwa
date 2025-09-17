@@ -311,6 +311,73 @@ button:active {
   z-index: 100;
   /* make sure it’s above other elements */
 }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  color: #333;
+}
+
+header {
+  background: #0b5;
+  color: white;
+  padding: 15px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.dashboard-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.metric {
+  display: inline-block;
+  margin-right: 30px;
+  margin-bottom: 10px;
+}
+
+.metric-value {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.btn {
+  background: #0b5;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #094;
+}
+
+.error {
+  background: #fee;
+  color: #d63031;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
 
 /* Menu styles *//*
 #menu {
