@@ -130,6 +130,22 @@
       const API_BASE =
         "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
 
+      function handleBusinessClick(businessId, type, url, query = "") {
+        // 1. Save the click to backend
+        fetch(`${API_BASE}/track_click`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            business_id: businessId,
+            type: type,
+            query: query,
+          }),
+        }).catch((err) => console.error("Click log failed", err));
+
+        // 2. Open the real website
+        window.open(url, "_blank");
+      }
+
       // Chat functionality
       const chat = document.getElementById("chat");
       const promptInput = document.getElementById("prompt");
@@ -140,7 +156,7 @@
         d.className = "msg " + (who === "user" ? "user" : "bot");
         if (who === "bot") {
           d.innerHTML = marked.parse(text); // render markdown
-          interceptLinks(d);  // 👈 rewrite links after rendering
+          interceptLinks(d); // 👈 rewrite links after rendering
         } else {
           d.textContent = text; // user messages stay plain
         }
