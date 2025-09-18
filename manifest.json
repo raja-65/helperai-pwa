@@ -77,27 +77,13 @@
       "name": "Business Login",
       "short_name": "Business",
       "description": "Access business dashboard",
-      "url": "/helperai-pwa/business-login.html",
+      "url": "/helperai-pwa/businesslogin.html",
       "icons": [
         {
           "src": "icons/business-icon-96x96.png",
           "sizes": "96x96"
         }
       ]
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshots/mobile-chat.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "platform": "narrow"
-    },
-    {
-      "src": "screenshots/desktop-dashboard.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "platform": "wide"
     }
   ]
 }
