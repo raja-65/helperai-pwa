@@ -222,10 +222,8 @@
 
                 if (response.ok && data.business_id) {
                     // store business id + session token
+                    localStorage.setItem('session_token', data.session_token);
                     localStorage.setItem('business_id', data.business_id);
-                    if (data.session_token) {
-                        localStorage.setItem('session_token', data.session_token);
-                    }
 
                     showMessage('Login successful. Redirecting to dashboard...', 'success');
                     setTimeout(() => {

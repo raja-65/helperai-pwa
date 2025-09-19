@@ -172,14 +172,12 @@
 
   <body>
     <header>
-      <div style="display: flex; align-items: center; gap: 12px">
-        <img src="logo.png" alt="HelperAI Logo" class="logo" />
+      <div style="display:flex;align-items:center;gap:12px">
+        <img src="logo.png" alt="HelperAI" style="height:36px" />
         <strong>HelperAI - Business Dashboard</strong>
       </div>
       <div>
-        <button onclick="window.location.href='index.html'">
-          Back to Main Site
-        </button>
+        <button id="logoutBtn" class="btn btn-secondary">Logout</button>
       </div>
     </header>
 
@@ -331,12 +329,7 @@
       async function loadDashboard() {
         try {
           const token = localStorage.getItem('session_token');
-          if (!token) {
-            showError('No session token found. Please login again.');
-            return;
-          }
-
-          const response = await fetch(`${API_BASE}/business/dashboard/${encodeURIComponent(businessId)}`, {
+          const resp = await fetch(`${API_BASE}/business/dashboard/${encodeURIComponent(businessId)}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -344,8 +337,8 @@
             }
           });
 
-          const data = await response.json();
-          if (!response.ok) {
+          const data = await resp.json();
+          if (!resp.ok) {
             throw new Error(data.error || JSON.stringify(data));
           }
 
@@ -354,6 +347,20 @@
           showError('Failed to load dashboard: ' + (err.message || err));
         }
       }
+
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        fetch(`${API_BASE}/business/logout`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('session_token')
+          }
+        }).finally(() => {
+          localStorage.removeItem('session_token');
+          localStorage.removeItem('business_id');
+          window.location.href = 'businesslogin.html';
+        });
+      });
 
       // ensure trackClick here sends the same payload shape as index.html
       function trackClick(businessId, clickType = 'website') {
