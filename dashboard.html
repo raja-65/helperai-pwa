@@ -172,8 +172,8 @@
 
   <body>
     <header>
-      <div style="display:flex;align-items:center;gap:12px">
-        <img src="logo.png" alt="HelperAI" style="height:36px" />
+      <div style="display: flex; align-items: center; gap: 12px">
+        <img src="logo.png" alt="HelperAI" style="height: 36px" />
         <strong>HelperAI - Business Dashboard</strong>
       </div>
       <div>
@@ -316,82 +316,109 @@
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-      const API_BASE = "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
+      function showError(msg) {
+        console.error("Dashboard error:", msg);
+
+        // Optional: show it in the UI
+        let container = document.getElementById("errorBox");
+        if (!container) {
+          container = document.createElement("div");
+          container.id = "errorBox";
+          container.style.color = "red";
+          container.style.margin = "1em";
+          document.body.prepend(container);
+        }
+        container.textContent = msg;
+      }
+    </script>
+
+    <script>
+      const API_BASE =
+        "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
       const urlParams = new URLSearchParams(window.location.search);
-      const businessId = urlParams.get('business_id') || localStorage.getItem('business_id');
+      const businessId =
+        urlParams.get("business_id") || localStorage.getItem("business_id");
 
       if (!businessId) {
-        showError('No business ID provided. Please login to access your dashboard.');
+        showError(
+          "No business ID provided. Please login to access your dashboard."
+        );
       } else {
         loadDashboard();
       }
 
       async function loadDashboard() {
-        const token = localStorage.getItem('session_token');
-        const businessId = new URLSearchParams(window.location.search).get('business_id') || localStorage.getItem('business_id');
+        const token = localStorage.getItem("session_token");
+        const businessId =
+          new URLSearchParams(window.location.search).get("business_id") ||
+          localStorage.getItem("business_id");
 
         if (!businessId) {
-          showError('No business_id. Please login.');
+          showError("No business_id. Please login.");
           return;
         }
 
         if (!token) {
-          showError('Missing session token. Please login again.');
+          showError("Missing session token. Please login again.");
           return;
         }
 
         try {
-          const resp = await fetch(`${API_BASE}/business/dashboard/${encodeURIComponent(businessId)}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + token
+          const resp = await fetch(
+            `${API_BASE}/business/dashboard/${encodeURIComponent(businessId)}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+              },
             }
-          });
+          );
 
           const data = await resp.json();
           if (!resp.ok) {
             // backend returns 403 for invalid/expired token
-            showError(data.error || 'Failed to load dashboard');
+            showError(data.error || "Failed to load dashboard");
             return;
           }
 
           displayDashboard(data);
         } catch (err) {
-          showError('Failed to load dashboard: ' + (err.message || err));
+          showError("Failed to load dashboard: " + (err.message || err));
         }
       }
 
-      document.getElementById('logoutBtn').addEventListener('click', () => {
+      document.getElementById("logoutBtn").addEventListener("click", () => {
         fetch(`${API_BASE}/business/logout`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('session_token')
-          }
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("session_token"),
+          },
         }).finally(() => {
-          localStorage.removeItem('session_token');
-          localStorage.removeItem('business_id');
-          window.location.href = 'businesslogin.html';
+          localStorage.removeItem("session_token");
+          localStorage.removeItem("business_id");
+          window.location.href = "businesslogin.html";
         });
       });
 
       // ensure trackClick here sends the same payload shape as index.html
-      function trackClick(businessId, clickType = 'website') {
+      function trackClick(businessId, clickType = "website") {
         if (!businessId) return;
         fetch(`${API_BASE}/track_click`, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             business_id: businessId,
             type: clickType,
-            query: 'dashboard_view'
+            query: "dashboard_view",
+          }),
+        })
+          .then((res) => {
+            if (!res.ok)
+              console.warn("dashboard track_click returned", res.status);
           })
-        })
-        .then(res => {
-          if (!res.ok) console.warn('dashboard track_click returned', res.status);
-        })
-        .catch(e => console.log('Click tracking failed:', e));
+          .catch((e) => console.log("Click tracking failed:", e));
       }
     </script>
   </body>
