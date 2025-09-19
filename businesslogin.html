@@ -221,20 +221,18 @@
                 const data = await response.json();
 
                 if (response.ok && data.business_id) {
-                    // Store business ID and session token for dashboard access
+                    // store business id + session token
                     localStorage.setItem('business_id', data.business_id);
                     if (data.session_token) {
                         localStorage.setItem('session_token', data.session_token);
                     }
-                    
-                    showMessage('Login successful! Redirecting to dashboard...', 'success');
-                    
-                    // Redirect to dashboard after 1 second
+
+                    showMessage('Login successful. Redirecting to dashboard...', 'success');
                     setTimeout(() => {
-                        window.location.href = `dashboard.html?business_id=${data.business_id}`;
-                    }, 1000);
+                        window.location.href = `dashboard.html?business_id=${encodeURIComponent(data.business_id)}`;
+                    }, 700);
                 } else {
-                    showMessage(data.error || 'Business not found. Please check your credentials.', 'error');
+                    showMessage(data.error || 'Login failed', 'error');
                 }
             } catch (error) {
                 showMessage('Connection error. Please try again.', 'error');
