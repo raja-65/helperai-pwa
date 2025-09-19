@@ -318,12 +318,8 @@
     <script>
       function showError(message) {
         console.error("Dashboard error:", message);
-
-        // if you have a loading spinner, hide it
         const spinner = document.getElementById("loadingSpinner");
         if (spinner) spinner.style.display = "none";
-
-        // create or update an error box
         let errorBox = document.getElementById("errorBox");
         if (!errorBox) {
           errorBox = document.createElement("div");
@@ -335,9 +331,8 @@
         }
         errorBox.textContent = message;
       }
-    </script>
-
-    <script>
+      window.showError = showError; // Optional: make global
+      
       const API_BASE =
         "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
       const urlParams = new URLSearchParams(window.location.search);
