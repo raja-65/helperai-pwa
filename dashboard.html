@@ -171,6 +171,19 @@
   </head>
 
   <body>
+    <body>
+  <!-- Add this FIRST to guarantee showError always exists -->
+  <script>
+    if (!globalThis.showError) {
+      globalThis.showError = function (msg) {
+        console.error("showError fallback:", msg);
+        alert(msg); // quick visible feedback
+      };
+    }
+  </script>
+
+  <!-- ... your existing HTML and scripts ... -->
+
     <header>
       <div style="display: flex; align-items: center; gap: 12px">
         <img src="logo.png" alt="HelperAI" style="height: 36px" />
@@ -315,26 +328,8 @@
     </div>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-      function showError(message) {
-        console.error("Dashboard error:", message);
-        const spinner = document.getElementById("loadingSpinner");
-        if (spinner) spinner.style.display = "none";
-        let errorBox = document.getElementById("errorBox");
-        if (!errorBox) {
-          errorBox = document.createElement("div");
-          errorBox.id = "errorBox";
-          errorBox.style.color = "red";
-          errorBox.style.fontWeight = "bold";
-          errorBox.style.margin = "1em";
-          document.body.prepend(errorBox);
-        }
-        errorBox.textContent = message;
-      }
-      window.showError = showError; // Optional: make global
-      </script>
-      <script>
 
+    <script>
       const API_BASE =
         "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
       const urlParams = new URLSearchParams(window.location.search);
