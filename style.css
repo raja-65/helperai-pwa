@@ -49,14 +49,14 @@ header {
   left: 0;
   right: 0;
   height: var(--header-height);
-  background: white;
-  border-bottom: 1px solid var(--border-color);
+  background: var(--primary-color);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 15px;
   box-shadow: var(--shadow);
-  z-index: 100;
+  z-index: 1000;
 }
 
 .logo {
@@ -92,16 +92,17 @@ main {
 
 .msg.user {
   background: var(--primary-color);
-  color: white;
+  color: #fff;
   margin-left: auto;
   border-bottom-right-radius: 4px;
 }
 
 .msg.bot {
-  background: white;
+  background: #ffffff;
   border: 1px solid var(--border-color);
+  color: var(--text-color);
+  box-shadow: none;
   border-bottom-left-radius: 4px;
-  box-shadow: var(--shadow);
 }
 
 /* Input bar */
@@ -110,13 +111,12 @@ main {
   bottom: 0;
   left: 0;
   right: 0;
-  background: white;
+  background: #ffffff;
   border-top: 1px solid var(--border-color);
   padding: 15px;
   display: flex;
   gap: 10px;
-  z-index: 100;
-  /* iOS Safari safe area */
+  z-index: 1001; /* above header and other content */
   padding-bottom: calc(15px + env(safe-area-inset-bottom));
 }
 
@@ -126,16 +126,9 @@ main {
   border: 1px solid var(--border-color);
   border-radius: 25px;
   font-size: 16px;
-  /* Prevent zoom on iOS */
+  background: #fff;     /* ensure white background */
+  color: #222;          /* dark text so you can read while typing */
   outline: none;
-  background: var(--secondary-color);
-  transition: all 0.3s ease;
-}
-
-#prompt:focus {
-  border-color: var(--primary-color);
-  background: white;
-  box-shadow: 0 0 0 3px rgba(0, 187, 85, 0.1);
 }
 
 #sendBtn {
@@ -173,7 +166,7 @@ main {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 200;
+  z-index: 1100;
   padding: 20px;
 }
 
@@ -333,17 +326,21 @@ header {
 }
 
 .dashboard-container {
+  margin-top: calc(var(--header-height) + 8px);
   max-width: 1200px;
-  margin: 20px auto;
+  margin-left: auto;
+  margin-right: auto;
   padding: 20px;
 }
 
 .dashboard-card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  color: var(--text-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
   padding: 20px;
   margin-bottom: 20px;
+  border: 1px solid #eee;
 }
 
 .metric {
@@ -412,22 +409,11 @@ header {
 
 /* Responsive design */
 @media (max-width: 768px) {
-  #bizModal .content {
-    margin: 10px;
-    padding: 20px;
+  .dashboard-container {
+    padding: 15px;
   }
-
-  .msg {
-    max-width: 90%;
-  }
-
-  #inputBar {
-    padding: 10px;
-  }
-
-  #prompt {
-    font-size: 16px;
-    /* Prevent zoom */
+  #chat {
+    padding: 15px 10px;
   }
 }
 

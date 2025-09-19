@@ -327,8 +327,20 @@
       }
 
       async function loadDashboard() {
+        const token = localStorage.getItem('session_token');
+        const businessId = new URLSearchParams(window.location.search).get('business_id') || localStorage.getItem('business_id');
+
+        if (!businessId) {
+          showError('No business_id. Please login.');
+          return;
+        }
+
+        if (!token) {
+          showError('Missing session token. Please login again.');
+          return;
+        }
+
         try {
-          const token = localStorage.getItem('session_token');
           const resp = await fetch(`${API_BASE}/business/dashboard/${encodeURIComponent(businessId)}`, {
             method: 'GET',
             headers: {
@@ -339,7 +351,9 @@
 
           const data = await resp.json();
           if (!resp.ok) {
-            throw new Error(data.error || JSON.stringify(data));
+            // backend returns 403 for invalid/expired token
+            showError(data.error || 'Failed to load dashboard');
+            return;
           }
 
           displayDashboard(data);

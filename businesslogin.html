@@ -421,6 +421,37 @@
                 showMessage('You are already logged in. Click <a href="dashboard.html?business_id=' + businessId + '">here</a> to go to your dashboard.', 'success');
             }
         };
+
+        async function onLoginSubmit(email, phone) {
+          try {
+            const resp = await fetch(`${API_BASE}/business/login`, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ email, phone })
+            });
+
+            const data = await resp.json();
+
+            if (!resp.ok) {
+              // show error from backend
+              showError(data.error || 'Login failed');
+              return;
+            }
+
+            // MUST store session_token and business_id BEFORE redirecting
+            if (data.session_token) {
+              localStorage.setItem('session_token', data.session_token);
+            }
+            if (data.business_id) {
+              localStorage.setItem('business_id', data.business_id);
+            }
+
+            // redirect to dashboard (dashboard will read token from localStorage)
+            window.location.href = `dashboard.html?business_id=${encodeURIComponent(data.business_id)}`;
+          } catch (err) {
+            showError('Login error: ' + (err.message || err));
+          }
+        }
     </script>
 </body>
 </html>
