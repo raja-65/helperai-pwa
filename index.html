@@ -130,36 +130,40 @@
       const API_BASE =
         "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
 
-      function handleBusinessClick(businessId, type, url, query = "") {
-        // 1. Save the click to backend
+      // Robust click tracker: sends business_id and click_type (accepts both "type" and "click_type" on backend)
+      function handleBusinessClick(businessId, clickType, url, query = "") {
+        if (!businessId) {
+          console.warn("handleBusinessClick called without businessId", { url, clickType, query });
+          if (url) window.open(url, "_blank", "noopener");
+          return;
+        }
+
+        // send tracking asynchronously (non-blocking)
         fetch(`${API_BASE}/track_click`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             business_id: businessId,
-            type: type,
-            query: query,
-          }),
+            type: clickType,    // backend accepts "type" or "click_type"
+            query: query
+          })
         })
-          .then((response) => {
-            if (!response.ok) {
-              console.error(
-                "Failed to log click:",
-                response.status,
-                response.statusText
-              );
+          .then(async (res) => {
+            const body = await res.text().catch(() => "");
+            if (!res.ok) {
+              console.error("track_click failed", res.status, body);
             } else {
-              console.log(
-                "Click logged successfully for business:",
-                businessId
-              );
+              console.log("track_click success", businessId, clickType);
             }
           })
-          .catch((err) => console.error("Click log failed:", err));
+          .catch((err) => console.error("track_click error", err));
 
-        // 2. Open the real website
-        window.open(url, "_blank");
+        // open external link immediately (tracking is fire-and-forget)
+        if (url) {
+          window.open(url, "_blank", "noopener");
+        }
       }
+
       // Chat functionality
       const chat = document.getElementById("chat");
       const promptInput = document.getElementById("prompt");
@@ -179,23 +183,76 @@
       }
 
       function interceptLinks(container) {
+        // Rewrites anchors produced by chat so clicks go through your redirect (server can log)
         const links = container.querySelectorAll("a");
         links.forEach((link) => {
-          const realUrl = link.href;
-          const encodedUrl = encodeURIComponent(realUrl);
+          try {
+            const realUrl = link.getAttribute("href") || link.href || "";
+            if (!realUrl) return;
 
-          // Replace href with tracking redirect
-          link.href =
-            API_BASE +
-            "/redirect?session_id=" +
-            sessionId +
-            "&url=" +
-            encodedUrl;
+            // If backend included the business id in the anchor (preferred), read it
+            const bizId = link.dataset.bizId || link.dataset.businessId || link.getAttribute("data-biz-id") || link.getAttribute("data-business-id");
 
-          // Always open in new tab
-          link.target = "_blank";
+            // store original URL as data attr (for optional client-side tracking)
+            link.dataset.originalUrl = realUrl;
+
+            // Build a redirect/tracking URL that your Lambda /redirect handler can log
+            const encodedUrl = encodeURIComponent(realUrl);
+            const sess = encodeURIComponent(sessionId);
+            let redirectUrl = `${API_BASE.replace(/\/$/, "")}/redirect?session_id=${sess}&url=${encodedUrl}`;
+            if (bizId) redirectUrl += `&business_id=${encodeURIComponent(bizId)}`;
+
+            // Replace href so user click triggers the server redirect (and server-side logging)
+            link.setAttribute("href", redirectUrl);
+            link.setAttribute("target", "_blank");
+            // flag for client-side delegation fallback
+            link.dataset.trackClick = "1";
+            if (bizId) link.dataset.bizId = bizId;
+          } catch (e) {
+            console.error("interceptLinks error", e);
+          }
         });
       }
+
+      // Optional: client-side non-blocking tracking fallback (use only if redirect doesn't log)
+      document.addEventListener("click", function (ev) {
+        const a = ev.target.closest && ev.target.closest('a[data-track-click]');
+        if (!a) return;
+
+        // If your /redirect endpoint already logs click using business_id and session_id, skip client-side send.
+        // Uncomment the following block only if you need client-side send as a backup.
+        /*
+        const bizId = a.dataset.bizId || null;
+        const originalUrl = a.dataset.originalUrl || a.href;
+        const payload = {
+          business_id: bizId,
+          type: 'website',
+          query: 'chat_link',
+          session_id: sessionId,
+          url: originalUrl,
+          ts: new Date().toISOString(),
+          ua: navigator.userAgent
+        };
+
+        try {
+          const body = JSON.stringify(payload);
+          if (navigator.sendBeacon) {
+            const blob = new Blob([body], { type: "application/json" });
+            navigator.sendBeacon(`${API_BASE.replace(/\/$/, "")}/track_click`, blob);
+          } else {
+            // keepalive fetch fallback
+            fetch(`${API_BASE.replace(/\/$/, "")}/track_click`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body,
+              keepalive: true
+            }).catch(() => {});
+          }
+        } catch (e) {
+          console.warn("client-side tracking fallback failed", e);
+        }
+        */
+      }, { passive: true });
 
       // Store session_id in browser localStorage
       let sessionId = localStorage.getItem("session_id");
@@ -414,5 +471,5 @@
     >
       Install App
     </button>
-  </body>
+    </body>
 </html>

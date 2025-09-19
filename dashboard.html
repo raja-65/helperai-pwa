@@ -318,218 +318,50 @@
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-      const API_BASE =
-        "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
-      let currentBusinessData = null;
-      let currentAnalytics = null;
-
-      // Get business ID from URL parameter or localStorage
+      const API_BASE = "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
       const urlParams = new URLSearchParams(window.location.search);
-      const businessId =
-        urlParams.get("business_id") || localStorage.getItem("business_id");
+      const businessId = urlParams.get('business_id') || localStorage.getItem('business_id');
 
       if (!businessId) {
-        showError(
-          "No business ID provided. Please access this page through the proper login flow."
-        );
+        showError('No business ID provided. Please login to access your dashboard.');
       } else {
         loadDashboard();
       }
 
       async function loadDashboard() {
         try {
-          const response = await fetch(
-            `${API_BASE}/business/dashboard/${businessId}`,
-            {
-              method: "GET",
-              headers: { "Content-Type": "application/json" },
-            }
-          );
+          const response = await fetch(`${API_BASE}/business/dashboard/${encodeURIComponent(businessId)}`, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'}
+          });
 
           const data = await response.json();
-
           if (!response.ok) {
-            throw new Error(data.error || "Failed to load dashboard");
+            throw new Error(data.error || JSON.stringify(data));
           }
 
           displayDashboard(data);
-        } catch (error) {
-          showError(`Failed to load dashboard: ${error.message}`);
+        } catch (err) {
+          showError('Failed to load dashboard: ' + (err.message || err));
         }
       }
 
-      function displayDashboard(data) {
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("dashboard-content").style.display = "block";
-
-        const business = data.business_info;
-        const analytics = data.analytics || {};
-        const daysUntilExpiry = data.days_until_expiry;
-        const isActive = data.is_active;
-
-        // Business Info
-        document.getElementById("business-name").textContent = business.name;
-        document.getElementById("business-email").textContent = business.email;
-        document.getElementById("business-phone").textContent = business.phone;
-        document.getElementById("business-address").textContent =
-          business.address || "Not provided";
-        document.getElementById("business-services").textContent =
-          business.services || "Not provided";
-
-        // Status Badge
-        const statusEl = document.getElementById("business-status");
-        if (isActive) {
-          if (daysUntilExpiry <= 7) {
-            statusEl.innerHTML =
-              '<span class="status-badge status-expiring">Expiring Soon</span>';
-            document.getElementById("renewal-notice").style.display = "block";
-          } else {
-            statusEl.innerHTML =
-              '<span class="status-badge status-active">Active</span>';
-          }
-        } else {
-          statusEl.innerHTML =
-            '<span class="status-badge status-inactive">Inactive</span>';
-        }
-
-        // Expiry
-        if (business.expiry) {
-          const expiryDate = new Date(business.expiry).toLocaleDateString();
-          const daysText =
-            daysUntilExpiry > 0
-              ? ` (${daysUntilExpiry} days remaining)`
-              : " (Expired)";
-          document.getElementById("business-expiry").textContent =
-            expiryDate + daysText;
-        } else {
-          document.getElementById("business-expiry").textContent = "Not set";
-        }
-
-        // Analytics Metrics
-        document.getElementById("total-impressions").textContent =
-          analytics.total_impressions || 0;
-        document.getElementById("monthly-impressions").textContent =
-          analytics.monthly_impressions || 0;
-        document.getElementById("total-clicks").textContent =
-          analytics.total_clicks || 0;
-        document.getElementById("click-rate").textContent =
-          analytics.click_through_rate
-            ? analytics.click_through_rate + "%"
-            : "0%";
-
-        // Detailed metrics
-        document.getElementById("avg-distance").textContent =
-          analytics.average_distance_km
-            ? analytics.average_distance_km + "km"
-            : "0km";
-        document.getElementById("active-days").textContent =
-          analytics.active_days || 0;
-        document.getElementById("recent-impressions").textContent =
-          analytics.recent_activity?.impressions_7d || 0;
-        document.getElementById("days-active").textContent =
-          analytics.days_since_creation || 0;
-
-        // Activity info
-        document.getElementById("last-impression").textContent =
-          analytics.last_impression
-            ? formatDateTime(analytics.last_impression)
-            : "Never";
-        document.getElementById("last-click").textContent = analytics.last_click
-          ? formatDateTime(analytics.last_click)
-          : "Never";
-
-        const recentActivity = analytics.recent_activity;
-        if (recentActivity) {
-          document.getElementById("recent-activity").textContent = `${
-            recentActivity.impressions_7d || 0
-          } recommendations, ${recentActivity.clicks_7d || 0} clicks`;
-        }
-
-        // Top queries
-        displayTopQueries(analytics.top_search_queries || []);
-
-        // Renew button
-        if (!isActive || daysUntilExpiry <= 7) {
-          document.getElementById("renew-btn").style.display = "inline-block";
-        }
-      }
-
-      function displayTopQueries(queries) {
-        const container = document.getElementById("top-queries");
-
-        if (queries.length === 0) {
-          container.innerHTML =
-            '<div class="query-item"><span class="query-text">No search data yet</span></div>';
-          return;
-        }
-
-        container.innerHTML = queries
-          .map(
-            (q) =>
-              `<div class="query-item">
-                    <span class="query-text">"${q.query}"</span>
-                    <span class="query-count">${q.count}</span>
-                </div>`
-          )
-          .join("");
-      }
-
-      function formatDateTime(isoString) {
-        try {
-          const date = new Date(isoString);
-          return date.toLocaleDateString() + " " + date.toLocaleTimeString();
-        } catch (e) {
-          return "Invalid date";
-        }
-      }
-
-      function showError(message) {
-        document.getElementById("loading").style.display = "none";
-        const errorContainer = document.getElementById("error-container");
-        errorContainer.innerHTML = `<div class="error">${message}</div>`;
-        errorContainer.style.display = "block";
-      }
-
-      // Update info button functionality
-      document.getElementById("update-info-btn").onclick = function () {
-        // For now, just show alert - you can implement modal later
-        alert(
-          "Update functionality will be available soon. Contact support for changes."
-        );
-      };
-
-      // Auto-refresh every 5 minutes
-      setInterval(loadDashboard, 5 * 60 * 1000);
-
-      // Add click tracking for website links (if you want to track when users click from recommendations)
-      function trackClick(businessId, clickType = "website") {
+      // ensure trackClick here sends the same payload shape as index.html
+      function trackClick(businessId, clickType = 'website') {
+        if (!businessId) return;
         fetch(`${API_BASE}/track_click`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
             business_id: businessId,
-            click_type: clickType,
-            query: "dashboard_view",
-          }),
-        }).catch((e) => console.log("Click tracking failed:", e));
-      }
-
-      // Show success message when dashboard loads
-      if (urlParams.get("success") === "true") {
-        const successDiv = document.createElement("div");
-        successDiv.className = "success";
-        successDiv.textContent =
-          "Welcome! Your business is now active and will appear in recommendations.";
-        document
-          .querySelector(".dashboard-container")
-          .insertBefore(successDiv, document.getElementById("loading"));
-
-        // Remove success param from URL
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname
-        );
+            type: clickType,
+            query: 'dashboard_view'
+          })
+        })
+        .then(res => {
+          if (!res.ok) console.warn('dashboard track_click returned', res.status);
+        })
+        .catch(e => console.log('Click tracking failed:', e));
       }
     </script>
   </body>
