@@ -4,8 +4,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>HelperAI</title>
-    <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#0b5" />
+
+    <!-- Use absolute path so browser finds manifest at the app scope -->
+    <link rel="manifest" href="/helperai-pwa/manifest.json" />
+
+    <!-- PWA & mobile meta -->
+    <meta name="theme-color" content="#00bb55" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <!-- Apple icons (optional but helps installability on iOS) -->
+    <link rel="apple-touch-icon" href="/helperai-pwa/icons/icon-192x192.png" />
+    <link rel="icon" href="/helperai-pwa/logo.png" />
+
     <link rel="stylesheet" href="style.css" />
   </head>
 
@@ -450,19 +462,23 @@
         if (installBtn) installBtn.style.display = "block";
       });
 
-      if (installBtn) {
-        installBtn.addEventListener("click", async () => {
-          if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === "accepted") {
-              console.log("PWA installed");
-            }
-            deferredPrompt = null;
-            installBtn.style.display = "none";
+      installBtn.addEventListener("click", async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === "accepted") {
+            console.log("PWA installed");
           }
-        });
-      }
+          deferredPrompt = null;
+          installBtn.style.display = "none";
+        }
+      });
+
+      // Debug helper: let dev manually trigger prompt if deferredPrompt is set
+      window.triggerInstallPrompt = () => {
+        if (deferredPrompt) deferredPrompt.prompt();
+        else console.warn('deferredPrompt not set yet');
+      };
     </script>
 
     <button
