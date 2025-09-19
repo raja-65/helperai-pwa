@@ -316,19 +316,24 @@
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-      function showError(msg) {
-        console.error("Dashboard error:", msg);
+      function showError(message) {
+        console.error("Dashboard error:", message);
 
-        // Optional: show it in the UI
-        let container = document.getElementById("errorBox");
-        if (!container) {
-          container = document.createElement("div");
-          container.id = "errorBox";
-          container.style.color = "red";
-          container.style.margin = "1em";
-          document.body.prepend(container);
+        // if you have a loading spinner, hide it
+        const spinner = document.getElementById("loadingSpinner");
+        if (spinner) spinner.style.display = "none";
+
+        // create or update an error box
+        let errorBox = document.getElementById("errorBox");
+        if (!errorBox) {
+          errorBox = document.createElement("div");
+          errorBox.id = "errorBox";
+          errorBox.style.color = "red";
+          errorBox.style.fontWeight = "bold";
+          errorBox.style.margin = "1em";
+          document.body.prepend(errorBox);
         }
-        container.textContent = msg;
+        errorBox.textContent = message;
       }
     </script>
 
