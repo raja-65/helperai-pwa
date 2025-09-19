@@ -140,12 +140,26 @@
             type: type,
             query: query,
           }),
-        }).catch((err) => console.error("Click log failed", err));
+        })
+          .then((response) => {
+            if (!response.ok) {
+              console.error(
+                "Failed to log click:",
+                response.status,
+                response.statusText
+              );
+            } else {
+              console.log(
+                "Click logged successfully for business:",
+                businessId
+              );
+            }
+          })
+          .catch((err) => console.error("Click log failed:", err));
 
         // 2. Open the real website
         window.open(url, "_blank");
       }
-
       // Chat functionality
       const chat = document.getElementById("chat");
       const promptInput = document.getElementById("prompt");
