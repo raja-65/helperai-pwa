@@ -221,9 +221,11 @@
                 const data = await response.json();
 
                 if (response.ok && data.business_id) {
-                    // Store business ID for dashboard access
+                    // Store business ID and session token for dashboard access
                     localStorage.setItem('business_id', data.business_id);
-                    localStorage.setItem('business_email', email);
+                    if (data.session_token) {
+                        localStorage.setItem('session_token', data.session_token);
+                    }
                     
                     showMessage('Login successful! Redirecting to dashboard...', 'success');
                     
