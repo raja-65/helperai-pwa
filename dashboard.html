@@ -332,7 +332,9 @@
         errorBox.textContent = message;
       }
       window.showError = showError; // Optional: make global
-      
+      </script>
+      <script>
+
       const API_BASE =
         "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
       const urlParams = new URLSearchParams(window.location.search);
@@ -420,6 +422,6 @@
           })
           .catch((e) => console.log("Click tracking failed:", e));
       }
-    </script>
+    </>
   </body>
 </html>
