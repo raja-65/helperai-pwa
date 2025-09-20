@@ -474,6 +474,56 @@
                     })
                     .catch((e) => console.log("Click tracking failed:", e));
             }
+
+
+            function displayDashboard(data) {
+                // hide loading
+                document.getElementById("loading").style.display = "none";
+                const dashboard = document.getElementById("dashboard-content");
+                dashboard.style.display = "block";
+
+                // Business Info
+                document.getElementById("business-name").textContent = data.business_name || "";
+                document.getElementById("business-email").textContent = data.user || "";
+                document.getElementById("business-phone").textContent = data.phone || "";
+                document.getElementById("business-address").textContent = data.address || "";
+                document.getElementById("business-services").textContent = (data.services || []).join(", ");
+                document.getElementById("business-status").textContent = data.is_active ? "Active" : "Inactive";
+                document.getElementById("business-expiry").textContent = data.expiry || "";
+
+                // Performance Analytics
+                document.getElementById("total-impressions").textContent = data.impressions || 0;
+                document.getElementById("monthly-impressions").textContent = data.monthly_impressions || 0;
+                document.getElementById("total-clicks").textContent = data.clicks || 0;
+                document.getElementById("click-rate").textContent = (data.ctr || 0) + "%";
+
+                // Detailed Insights
+                document.getElementById("avg-distance").textContent = (data.avg_distance || 0) + "km";
+                document.getElementById("active-days").textContent = data.active_days || 0;
+                document.getElementById("recent-impressions").textContent = data.recent_impressions || 0;
+                document.getElementById("days-active").textContent = data.days_active || 0;
+
+                // Activity
+                document.getElementById("last-impression").textContent = data.last_impression || "Never";
+                document.getElementById("last-click").textContent = data.last_click || "Never";
+                document.getElementById("recent-activity").textContent = data.recent_activity || "";
+
+                // Queries
+                const topQueries = document.getElementById("top-queries");
+                topQueries.innerHTML = "";
+                if (data.queries && data.queries.length) {
+                    data.queries.forEach(q => {
+                        const div = document.createElement("div");
+                        div.className = "query-item";
+                        div.innerHTML = `<span class="query-text">${q.query}</span>
+                       <span class="query-count">${q.count}</span>`;
+                        topQueries.appendChild(div);
+                    });
+                } else {
+                    topQueries.innerHTML = "<div>No queries available</div>";
+                }
+            }
+
         </script>
     </body>
 
