@@ -205,7 +205,7 @@
         <!-- Add this FIRST to guarantee showError always exists -->
         <script>
             if (!globalThis.showError) {
-                globalThis.showError = function (msg) {
+                globalThis.showError = function(msg) {
                     console.error("showError fallback:", msg);
                     alert(msg); // quick visible feedback
                 };
@@ -483,41 +483,83 @@
                 dashboard.style.display = "block";
 
                 // Business info
-                document.getElementById("business-name").textContent = data.business_name || "";
-                document.getElementById("business-id").textContent = data.business_id || "";
+                const businessNameEl = document.getElementById("business-name");
+                if (businessNameEl) {
+                    businessNameEl.textContent = data.business_name || "";
+                }
+
+                // Note: There is no 'business-id' in your HTML. Skipping.
 
                 // Performance analytics
-                document.getElementById("total-impressions").textContent = data.total_impressions || 0;
-                document.getElementById("monthly-impressions").textContent = data.monthly_impressions || 0;
-                document.getElementById("total-clicks").textContent = data.total_clicks || 0;
-                document.getElementById("monthly-clicks").textContent = data.monthly_clicks || 0;
-                document.getElementById("click-rate").textContent = (data.click_through_rate || 0) + "%";
+                const totalImpressionsEl = document.getElementById("total-impressions");
+                if (totalImpressionsEl) {
+                    totalImpressionsEl.textContent = data.total_impressions || 0;
+                }
+
+                const monthlyImpressionsEl = document.getElementById("monthly-impressions");
+                if (monthlyImpressionsEl) {
+                    monthlyImpressionsEl.textContent = data.monthly_impressions || 0;
+                }
+
+                const totalClicksEl = document.getElementById("total-clicks");
+                if (totalClicksEl) {
+                    totalClicksEl.textContent = data.total_clicks || 0;
+                }
+
+                // Note: There is no 'monthly-clicks' in your HTML. Skipping.
+
+                const clickRateEl = document.getElementById("click-rate");
+                if (clickRateEl) {
+                    clickRateEl.textContent = (data.click_through_rate || 0) + "%";
+                }
 
                 // Activity insights
-                document.getElementById("avg-distance").textContent = (data.average_distance_km || 0) + " km";
-                document.getElementById("active-days").textContent = data.active_days || 0;
-                document.getElementById("recent-impressions").textContent = data.recent_activity?.impressions_7d || 0;
-                document.getElementById("recent-clicks").textContent = data.recent_activity?.clicks_7d || 0;
+                const avgDistanceEl = document.getElementById("avg-distance");
+                if (avgDistanceEl) {
+                    avgDistanceEl.textContent = (data.average_distance_km || 0) + " km";
+                }
+
+                const activeDaysEl = document.getElementById("active-days");
+                if (activeDaysEl) {
+                    activeDaysEl.textContent = data.active_days || 0;
+                }
+
+                const recentImpressionsEl = document.getElementById("recent-impressions");
+                if (recentImpressionsEl) {
+                    recentImpressionsEl.textContent = data.recent_activity?.impressions_7d || 0;
+                }
+
+                // Note: There is no 'recent-clicks' in your HTML. Skipping.
+                // Note: There is no 'days-active' in your HTML. Skipping.
 
                 // Last activity
-                document.getElementById("last-impression").textContent = data.last_impression || "Never";
-                document.getElementById("last-click").textContent = data.last_click || "Never";
+                const lastImpressionEl = document.getElementById("last-impression");
+                if (lastImpressionEl) {
+                    lastImpressionEl.textContent = data.last_impression || "Never";
+                }
+
+                const lastClickEl = document.getElementById("last-click");
+                if (lastClickEl) {
+                    lastClickEl.textContent = data.last_click || "Never";
+                }
 
                 // Top queries
                 const topQueriesContainer = document.getElementById("top-queries");
-                topQueriesContainer.innerHTML = "";
-                if (data.top_search_queries && data.top_search_queries.length) {
-                    data.top_search_queries.forEach(item => {
-                        const div = document.createElement("div");
-                        div.className = "query-item";
-                        div.innerHTML = `
-        <span class="query-text">${item.query}</span>
-        <span class="query-count">${item.count}</span>
-      `;
-                        topQueriesContainer.appendChild(div);
-                    });
-                } else {
-                    topQueriesContainer.innerHTML = "<div>No queries available</div>";
+                if (topQueriesContainer) {
+                    topQueriesContainer.innerHTML = "";
+                    if (data.top_search_queries && data.top_search_queries.length) {
+                        data.top_search_queries.forEach(item => {
+                            const div = document.createElement("div");
+                            div.className = "query-item";
+                            div.innerHTML = `
+                                <span class="query-text">${item.query}</span>
+                                <span class="query-count">${item.count}</span>
+                            `;
+                            topQueriesContainer.appendChild(div);
+                        });
+                    } else {
+                        topQueriesContainer.innerHTML = "<div>No queries available</div>";
+                    }
                 }
             }
         </script>
