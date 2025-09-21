@@ -1,21 +1,697 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Pricing Policy - HelperAI</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pricing - HelperAI | Affordable Business Listing & AI Recommendations</title>
+  <meta name="description" content="Simple, transparent pricing for HelperAI business listings. Just ₹2000/month to get your business recommended by our AI assistant to potential customers.">
+  <meta name="keywords" content="HelperAI pricing, business listing cost, AI recommendations price, digital marketing pricing, local business promotion">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://helperai.com/pricing.html">
+  <meta property="og:title" content="HelperAI Pricing - Affordable Business Promotion">
+  <meta property="og:description" content="Get your business discovered by customers through AI recommendations for just ₹2000/month. No hidden fees, simple pricing.">
+  <meta property="og:type" content="website">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 30px;
+      margin-bottom: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-size: 3em;
+      margin-bottom: 15px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 1.3em;
+      font-weight: 300;
+      margin-bottom: 20px;
+    }
+
+    .highlight-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2em;
+      font-weight: bold;
+      color: #00bb55;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .pricing-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 25px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+      border: 3px solid #00bb55;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      transition: transform 0.3s ease;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: -10px;
+      right: 30px;
+      background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .plan-name {
+      font-size: 2.2em;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .plan-description {
+      color: #666;
+      font-size: 1.1em;
+      margin-bottom: 30px;
+    }
+
+    .price-display {
+      margin: 30px 0;
+    }
+
+    .currency {
+      font-size: 2em;
+      color: #00bb55;
+      vertical-align: top;
+    }
+
+    .price {
+      font-size: 4em;
+      color: #2c3e50;
+      font-weight: bold;
+    }
+
+    .period {
+      font-size: 1.2em;
+      color: #666;
+      margin-left: 10px;
+    }
+
+    .original-price {
+      text-decoration: line-through;
+      color: #999;
+      font-size: 1.5em;
+      margin-right: 15px;
+    }
+
+    .features-list {
+      text-align: left;
+      margin: 30px 0;
+    }
+
+    .features-list h3 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.4em;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      margin: 12px 0;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+      background: #e9ecef;
+      transform: translateX(5px);
+    }
+
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      background: #00bb55;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .cta-button {
+      background: linear-gradient(45deg, #00bb55, #00a049);
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      border-radius: 30px;
+      font-size: 1.2em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(0, 187, 85, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 20px 0;
+      width: 100%;
+    }
+
+    .cta-button:hover {
+      background: linear-gradient(45deg, #00a049, #008a3d);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 187, 85, 0.4);
+    }
+
+    .money-back {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 30px 0;
+      text-align: center;
+      border: 2px solid #00bb55;
+    }
+
+    .comparison-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      margin: 40px 0;
+    }
+
+    .comparison-section h2 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.2em;
+      border-bottom: 3px solid #00bb55;
+      display: inline-block;
+      width: 100%;
+      padding-bottom: 15px;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+
+    .comparison-card {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      border: 2px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+
+    .helperai-card {
+      border-color: #00bb55;
+      background: linear-gradient(135deg, #00bb55, #00a049);
+      color: white;
+    }
+
+    .comparison-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .comparison-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .comparison-price {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    .faq-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      margin: 40px 0;
+    }
+
+    .faq-section h2 {
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 2.2em;
+      text-align: center;
+      border-bottom: 3px solid #00bb55;
+      padding-bottom: 15px;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .faq-item {
+      background: #f8f9fa;
+      margin: 15px 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e9ecef;
+    }
+
+    .faq-question {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      padding: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .faq-answer.active {
+      padding: 20px;
+      max-height: 200px;
+    }
+
+    .back-link {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .back-link a {
+      display: inline-block;
+      background: linear-gradient(45deg, #00bb55, #00a049);
+      color: white;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 187, 85, 0.3);
+    }
+
+    .back-link a:hover {
+      background: linear-gradient(45deg, #00a049, #008a3d);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 187, 85, 0.4);
+    }
+
+    .testimonial-section {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .testimonial-section h2 {
+      margin-bottom: 30px;
+      font-size: 2.2em;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+
+    .testimonial-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 15px;
+      font-size: 1.1em;
+      line-height: 1.6;
+    }
+
+    .testimonial-author {
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .testimonial-business {
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 2.2em;
+      }
+
+      .pricing-card {
+        padding: 30px 20px;
+      }
+
+      .price {
+        font-size: 3em;
+      }
+
+      .highlight-stats {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .comparison-grid,
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h2>Pricing Policy</h2>
-  <p>
-    HelperAI provides a subscription service for businesses to be recommended
-    inside our chatbot system. The subscription fee is fixed at
-    <strong>₹2000 per month</strong>.
-  </p>
-  <p>
-    Once subscribed, businesses will be added to our database and shown to users
-    when their queries match the business services.
-  </p>
-  <a href="index.html">← Back to Home</a>
+  <div class="container">
+    <header>
+      <h1>Simple, Transparent Pricing</h1>
+      <p class="subtitle">Get your business discovered by customers through AI recommendations</p>
+      <div class="highlight-stats">
+        <div class="stat-item">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Active Businesses</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">25K+</div>
+          <div class="stat-label">Customer Connections</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">95%</div>
+          <div class="stat-label">Satisfaction Rate</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Pricing Card -->
+    <div class="pricing-card">
+      <div class="popular-badge">Most Popular</div>
+      <div class="plan-name">Business Pro</div>
+      <div class="plan-description">Everything you need to get discovered by customers through our AI assistant</div>
+      
+      <div class="price-display">
+        <span class="currency">₹</span>
+        <span class="price">2,000</span>
+        <span class="period">/month</span>
+      </div>
+
+      <div class="features-list">
+        <h3>What's Included:</h3>
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <div>AI-powered business recommendations to customers</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <div>Complete business profile with contact details</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <div>Location-based customer targeting</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <div>Detailed analytics and insights dashboard</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <div>Track customer interactions and clicks</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <div>Popular search queries analysis</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <div>24/7 customer support</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">✓</div>
+          <div>No setup fees or hidden charges</div>
+        </div>
+      </div>
+
+      <button class="cta-button" onclick="window.location.href='index.html'">Get Started Today</button>
+
+      <div class="money-back">
+        <strong>30-Day Money-Back Guarantee</strong><br>
+        Not satisfied? Get a full refund within 30 days of signup.
+      </div>
+    </div>
+
+    <!-- Comparison Section -->
+    <div class="comparison-section">
+      <h2>Why Choose HelperAI?</h2>
+      <div class="comparison-grid">
+        <div class="comparison-card">
+          <div class="comparison-title">Traditional Advertising</div>
+          <div class="comparison-price">₹10,000+</div>
+          <ul style="list-style: none; padding: 0;">
+            <li>❌ No guaranteed visibility</li>
+            <li>❌ Broad, untargeted reach</li>
+            <li>❌ Limited analytics</li>
+            <li>❌ High cost per lead</li>
+            <li>❌ Complex setup process</li>
+          </ul>
+        </div>
+
+        <div class="comparison-card helperai-card">
+          <div class="comparison-title">HelperAI</div>
+          <div class="comparison-price">₹2,000</div>
+          <ul style="list-style: none; padding: 0;">
+            <li>✅ AI-targeted recommendations</li>
+            <li>✅ Qualified customer leads</li>
+            <li>✅ Detailed analytics</li>
+            <li>✅ Low cost per acquisition</li>
+            <li>✅ 5-minute setup</li>
+          </ul>
+        </div>
+
+        <div class="comparison-card">
+          <div class="comparison-title">Social Media Ads</div>
+          <div class="comparison-price">₹8,000+</div>
+          <ul style="list-style: none; padding: 0;">
+            <li>❌ Requires constant optimization</li>
+            <li>❌ Ad fatigue over time</li>
+            <li>❌ Platform dependency</li>
+            <li>❌ Competition drives costs up</li>
+            <li>❌ Time-consuming management</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="testimonial-section">
+      <h2>What Our Customers Say</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-text">"HelperAI helped us get 3x more customers in just 2 months. The AI recommendations are incredibly accurate!"</div>
+          <div class="testimonial-author">Rajesh Kumar</div>
+          <div class="testimonial-business">Kumar Electronics, Bangalore</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-text">"Best investment for our restaurant. We get targeted customers who are actually looking for our cuisine."</div>
+          <div class="testimonial-author">Priya Sharma</div>
+          <div class="testimonial-business">Spice Garden Restaurant, Mumbai</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-text">"Simple setup, great results. The analytics help us understand our customers better."</div>
+          <div class="testimonial-author">Mohammad Ali</div>
+          <div class="testimonial-business">Ali Services, Delhi</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+      <h2>Pricing FAQ</h2>
+      
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Are there any setup fees or hidden charges?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>No! The ₹2,000 monthly fee includes everything - setup, maintenance, analytics, and support. No hidden fees, no additional charges.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Can I cancel my subscription anytime?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Yes, you can cancel anytime with no penalty. Your service continues until the end of your current billing period.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How quickly will I see results?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Most businesses start receiving AI recommendations within 24 hours of signup. You can track everything through your dashboard.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Is there a contract or minimum commitment?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>No contracts! Pay monthly with the flexibility to cancel anytime. We believe our results will speak for themselves.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What payment methods do you accept?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>We accept all major payment methods through Razorpay including credit cards, debit cards, UPI, and net banking.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="back-link">
+      <a href="index.html">← Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    function toggleFaq(element) {
+      const answer = element.nextElementSibling;
+      const icon = element.querySelector('span:last-child');
+      
+      document.querySelectorAll('.faq-answer').forEach(item => {
+        if (item !== answer) {
+          item.classList.remove('active');
+          item.previousElementSibling.querySelector('span:last-child').textContent = '+';
+        }
+      });
+      
+      if (answer.classList.contains('active')) {
+        answer.classList.remove('active');
+        icon.textContent = '+';
+      } else {
+        answer.classList.add('active');
+        icon.textContent = '−';
+      }
+    }
+
+    // Add scroll animations
+    window.addEventListener('scroll', () => {
+      const elements = document.querySelectorAll('.pricing-card, .comparison-section, .testimonial-section, .faq-section');
+      elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const elements = document.querySelectorAll('.pricing-card, .comparison-section, .testimonial-section, .faq-section');
+      elements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(30px)';
+        element.style.transition = 'all 0.8s ease';
+      });
+    });
+  </script>
 </body>
 </html>

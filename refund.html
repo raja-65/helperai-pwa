@@ -1,17 +1,416 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Refund Policy - HelperAI</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Refund Policy - HelperAI | Cancellation & Refund Terms</title>
+  <meta name="description" content="HelperAI refund and cancellation policy. Clear terms for business subscription refunds, cancellation procedures, and billing policies.">
+  <meta name="keywords" content="HelperAI refund policy, cancellation terms, subscription refund, billing policy, money back">
+  <meta name="robots" content="index, follow">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.7;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-size: 2.8em;
+      margin-bottom: 15px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .content-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 40px;
+      margin: 25px 0;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    h2 {
+      color: #2c3e50;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #00bb55;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-icon {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(45deg, #00bb55, #00a049);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      font-size: 1.05em;
+    }
+
+    .warning-box {
+      background: linear-gradient(120deg, #ff7675, #fd79a8);
+      color: white;
+      padding: 25px;
+      border-radius: 15px;
+      margin: 25px 0;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+
+    .process-steps {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 15px;
+      margin: 25px 0;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      margin: 20px 0;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .step-number {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+
+    ul {
+      margin: 15px 0 15px 25px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    .back-link {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .back-link a {
+      display: inline-block;
+      background: linear-gradient(45deg, #00bb55, #00a049);
+      color: white;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 187, 85, 0.3);
+    }
+
+    .back-link a:hover {
+      background: linear-gradient(45deg, #00a049, #008a3d);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 187, 85, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 2.2em;
+      }
+
+      .content-section {
+        padding: 25px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h2>Cancellation & Refund Policy</h2>
-  <p>
-    Subscriptions are billed monthly at ₹2000. Once a payment is made,
-    it is <strong>non-refundable</strong>. You may cancel your subscription at
-    any time, and it will not auto-renew after the current billing cycle.
-  </p>
-  <a href="index.html">← Back to Home</a>
+  <div class="container">
+    <header>
+      <h1>Refund & Cancellation Policy</h1>
+      <p style="color: #666; margin-top: 10px;">Clear and transparent refund terms for HelperAI services</p>
+    </header>
+
+    <section class="content-section">
+      <h2><span class="section-icon">⚠️</span>Important Notice</h2>
+      
+      <div class="warning-box">
+        All HelperAI subscription payments are NON-REFUNDABLE once processed. Please read this policy carefully before subscribing.
+      </div>
+
+      <p>HelperAI operates on a monthly subscription model for business listings. Our no-refund policy ensures we can maintain consistent service quality and continue developing our AI recommendation platform.</p>
+    </section>
+
+    <section class="content-section">
+      <h2><span class="section-icon">💰</span>Subscription Details</h2>
+      
+      <h3>Monthly Billing</h3>
+      <ul>
+        <li><strong>Subscription Fee:</strong> ₹2,000 per month</li>
+        <li><strong>Billing Cycle:</strong> Monthly, charged in advance</li>
+        <li><strong>Payment Processing:</strong> Secure payment via Razorpay</li>
+        <li><strong>Service Activation:</strong> Within 24 hours of successful payment</li>
+      </ul>
+
+      <h3>What You Receive</h3>
+      <ul>
+        <li>Immediate inclusion in AI business recommendations</li>
+        <li>Access to comprehensive analytics dashboard</li>
+        <li>24/7 customer support</li>
+        <li>Monthly performance reports</li>
+        <li>Customer inquiry tracking</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2><span class="section-icon">🚫</span>No-Refund Policy</h2>
+      
+      <h3>Policy Explanation</h3>
+      <p>Once your payment is successfully processed, we immediately begin providing services including:</p>
+      <ul>
+        <li>Adding your business to our AI recommendation database</li>
+        <li>Making your business discoverable to customers</li>
+        <li>Providing analytics and dashboard access</li>
+        <li>Allocating server resources for your business profile</li>
+      </ul>
+
+      <p>Since these services are delivered immediately and continuously throughout your subscription period, <strong>refunds cannot be provided for any unused portion of your subscription</strong>.</p>
+
+      <h3>Why This Policy Exists</h3>
+      <ul>
+        <li><strong>Immediate Service Delivery:</strong> Your business starts receiving benefits immediately</li>
+        <li><strong>Resource Allocation:</strong> We allocate AI processing power and storage for your business</li>
+        <li><strong>Operational Costs:</strong> Ongoing costs for servers, AI processing, and support staff</li>
+        <li><strong>Service Consistency:</strong> Ensures we can maintain reliable service for all users</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2><span class="section-icon">✋</span>Limited Exceptions</h2>
+      
+      <p>Refunds may be considered ONLY in these specific circumstances:</p>
+      
+      <h3>Technical Errors</h3>
+      <ul>
+        <li>Duplicate charges due to payment processing errors</li>
+        <li>Charges after successful cancellation due to system malfunction</li>
+        <li>Billing errors on our part</li>
+      </ul>
+
+      <h3>Service Unavailability</h3>
+      <ul>
+        <li>Complete service outage for more than 7 consecutive days</li>
+        <li>Inability to access your business dashboard for extended periods due to our technical issues</li>
+      </ul>
+
+      <h3>Exceptional Circumstances</h3>
+      <p>Other refund requests will be evaluated on a case-by-case basis and may be approved only in truly exceptional circumstances at our sole discretion.</p>
+    </section>
+
+    <section class="content-section">
+      <h2><span class="section-icon">❌</span>How to Cancel Your Subscription</h2>
+      
+      <div class="process-steps">
+        <h3 style="margin-bottom: 20px;">Cancellation Process</h3>
+        
+        <div class="step">
+          <div class="step-number">1</div>
+          <div>
+            <strong>Login to Dashboard</strong><br>
+            Access your business dashboard using your registered email and phone number.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div>
+            <strong>Navigate to Subscription</strong><br>
+            Go to the subscription management section in your dashboard.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div>
+            <strong>Cancel Subscription</strong><br>
+            Click the "Cancel Subscription" button and confirm your cancellation.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div>
+            <strong>Confirmation</strong><br>
+            You'll receive an email confirmation of your cancellation request.
+          </div>
+        </div>
+      </div>
+
+      <h3>Alternative Cancellation Methods</h3>
+      <ul>
+        <li><strong>Email:</strong> Send cancellation request to basavarajrathod578@gmail.com</li>
+        <li><strong>Phone:</strong> Call +91-8088492627 during business hours</li>
+        <li><strong>Response Time:</strong> Cancellations processed within 24 hours</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2><span class="section-icon">⏰</span>What Happens After Cancellation</h2>
+      
+      <h3>Immediate Effects</h3>
+      <ul>
+        <li>No future charges will be made to your payment method</li>
+        <li>You'll receive a cancellation confirmation email</li>
+        <li>Your subscription will not auto-renew</li>
+      </ul>
+
+      <h3>Service Continuation</h3>
+      <ul>
+        <li>Your business remains active in AI recommendations until the end of your current billing period</li>
+        <li>Dashboard access continues until subscription expires</li>
+        <li>Customer support remains available during the active period</li>
+      </ul>
+
+      <h3>After Subscription Expires</h3>
+      <ul>
+        <li>Your business will be removed from AI recommendations</li>
+        <li>Dashboard access will be revoked</li>
+        <li>Historical data will be retained for 30 days for potential reactivation</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2><span class="section-icon">🔄</span>Reactivation</h2>
+      
+      <h3>Returning Customers</h3>
+      <p>If you cancelled your subscription and want to return:</p>
+      <ul>
+        <li>You can resubscribe at any time through our website</li>
+        <li>Your business data will be restored if reactivated within 30 days</li>
+        <li>Historical analytics may be available depending on the gap period</li>
+        <li>No penalties or additional fees for reactivation</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2><span class="section-icon">📞</span>Need Help?</h2>
+      
+      <h3>Before You Cancel</h3>
+      <p>If you're considering cancellation due to:</p>
+      <ul>
+        <li>Technical issues with the platform</li>
+        <li>Questions about how the service works</li>
+        <li>Concerns about performance</li>
+        <li>Billing questions</li>
+      </ul>
+      <p>Please contact our support team first. We're here to help resolve any issues.</p>
+
+      <h3>Contact Information</h3>
+      <ul>
+        <li><strong>Email:</strong> basavarajrathod578@gmail.com</li>
+        <li><strong>Phone:</strong> +91-8088492627</li>
+        <li><strong>Business Hours:</strong> Monday-Friday, 9 AM - 6 PM IST</li>
+        <li><strong>Response Time:</strong> Within 24 hours for email inquiries</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2><span class="section-icon">📋</span>Important Notes</h2>
+      
+      <ul>
+        <li>This refund policy applies to all HelperAI business subscriptions</li>
+        <li>Customer chat services remain free and are not subject to any charges</li>
+        <li>We reserve the right to modify this policy with 30 days notice</li>
+        <li>This policy is governed by Indian law</li>
+        <li>All disputes will be resolved in Bangalore, Karnataka courts</li>
+      </ul>
+
+      <p style="margin-top: 25px;"><strong>By subscribing to HelperAI, you acknowledge that you have read and understood this refund policy and agree to its terms.</strong></p>
+    </section>
+
+    <div class="back-link">
+      <a href="index.html">← Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    // Add scroll animations
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.content-section');
+      sections.forEach(section => {
+        const sectionTop = section.getBoundingClientRect().top;
+        const sectionVisible = 150;
+        
+        if (sectionTop < window.innerHeight - sectionVisible) {
+          section.style.opacity = '1';
+          section.style.transform = 'translateY(0)';
+        }
+      });
+    });
+
+    // Initialize animations
+    document.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('.content-section');
+      sections.forEach((section, index) => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        section.style.transition = `all 0.6s ease ${index * 0.1}s`;
+      });
+    });
+  </script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>HelperAI</title>
+  <title>HelperAI - Your Personal AI Assistant</title>
 
   <!-- Use absolute path so browser finds manifest at the app scope -->
   <link rel="manifest" href="/helperai-pwa/manifest.json" />
@@ -19,81 +19,483 @@
   <link rel="apple-touch-icon" href="/helperai-pwa/icons/icon-192x192.png" />
   <link rel="icon" href="/helperai-pwa/logo.png" />
 
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      height: 36px;
+      width: auto;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button {
+      background: linear-gradient(45deg, #00bb55, #00a049);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 187, 85, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 187, 85, 0.4);
+      background: linear-gradient(45deg, #00a049, #008a3d);
+    }
+
+    #menuBtn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 1001;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      padding: 0;
+    }
+
+    #menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      width: 280px;
+      height: 100vh;
+      box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+      padding: 80px 20px 20px;
+      z-index: 1000;
+    }
+
+    #menu a {
+      display: block;
+      padding: 15px 0;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      transition: color 0.3s ease;
+    }
+
+    #menu a:hover {
+      color: #00bb55;
+    }
+
+    #chat {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      height: calc(100vh - 200px);
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+  
+    }
+
+    .msg {
+      margin: 15px 0;
+      padding: 15px 20px;
+      border-radius: 20px;
+      max-width: 80%;
+      word-wrap: break-word;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg.user {
+      background: linear-gradient(45deg, #00bb55, #00a049);
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 5px;
+    }
+
+    .msg.bot {
+      background: #f8f9fa;
+      color: #333;
+      border: 1px solid #e9ecef;
+      border-bottom-left-radius: 5px;
+    }
+
+    #inputBar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px;
+      border-radius: 50px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      width: 90%;
+      max-width: 600px;
+    }
+
+    #prompt {
+      flex: 1;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      outline: none;
+      font-size: 16px;
+      background: #f8f9fa;
+    }
+
+    #sendBtn {
+      padding: 12px 25px;
+      border-radius: 25px;
+    }
+
+    /* Business Modal Styles */
+    #bizModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      -webkit-backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #bizModal .content {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-tabs {
+      display: flex;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-tab {
+      flex: 1;
+      padding: 15px 20px;
+      background: #f8f9fa;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      color: #666;
+    }
+
+    .modal-tab.active {
+      background: linear-gradient(45deg, #00bb55, #00a049);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #00bb55;
+      box-shadow: 0 0 0 3px rgba(0, 187, 85, 0.1);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .button-group button {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    #bizMsg {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    #installBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 15px 25px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 10px 15px;
+      }
+      
+      .nav-buttons {
+        gap: 5px;
+      }
+      
+      button {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+      
+      #chat {
+        margin: 10px;
+        padding: 15px;
+        height: calc(100vh - 160px);
+      }
+      
+      #inputBar {
+        width: 95%;
+        padding: 10px;
+      }
+      
+      #bizModal .content {
+        padding: 20px;
+        margin: 10px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <nav id="menu" style="
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background: #fff;
-        width: 220px;
-        height: 100%;
-        box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
-        padding: 12px;
-      ">
-    <a href="about.html">About Us</a><br />
-    <a href="pricing.html">Pricing</a><br />
-    <a href="shipping.html">Shipping</a><br />
-    <a href="terms.html">Terms & Conditions</a><br />
-    <a href="privacy.html">Privacy Policy</a><br />
-    <a href="refund.html">Refund Policy</a><br />
-    <a href="contact.html">Contact</a><br />
+  <nav id="menu">
+    <a href="about.html">About Us</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="shipping.html">Shipping</a>
+    <a href="terms.html">Terms & Conditions</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="refund.html">Refund Policy</a>
+    <a href="contact.html">Contact</a>
   </nav>
-  <button id="menuBtn" style="position: fixed; top: 10px; left: 10px">
-    ☰
-  </button>
+  
+  <button id="menuBtn">☰</button>
 
   <header>
     <div style="display: flex; align-items: center; gap: 12px">
       <img src="logo.png" alt="HelperAI Logo" class="logo" />
       <strong>HelperAI</strong>
     </div>
-    <div><button id="businessBtn">Business</button></div>
+    <div class="nav-buttons">
+      <button id="businessBtn">Business Portal</button>
+    </div>
   </header>
 
-  <div id="chat"></div>
+  <div id="chat">
+    <div class="msg bot">
+      Welcome to HelperAI! I'm your personal AI assistant. I can help you find local businesses, answer questions, and provide recommendations based on your location. What would you like to know today?
+    </div>
+  </div>
+
   <div id="inputBar">
-    <input id="prompt" placeholder="Ask anything..." />
+    <input id="prompt" placeholder="Ask me anything..." />
     <button id="sendBtn">Send</button>
   </div>
 
+  <!-- Enhanced Business Modal -->
   <div id="bizModal">
     <div class="content">
-      <h3>Business Signup</h3>
-      <label>Name <input id="biz_name" placeholder="Shop name" /></label><br />
-      <label>Email <input id="biz_email" placeholder="owner@example.com" /></label><br />
-      <label>Phone <input id="biz_phone" placeholder="10-digit number" /></label><br />
-      <label>Type
-        <select id="biz_type">
-          <option>local</option>
-          <option>global</option>
-        </select> </label><br />
-      <label>Categories
-        <input id="biz_cat" placeholder="e.g., food,services" /></label><br />
-
-      <!-- NEW: Services/Offerings field -->
-      <label>Services Offered
-        <textarea id="biz_services" placeholder="Describe your services, products, or what you offer customers..."
-          rows="3" style="width: 100%; resize: vertical"></textarea></label><br />
-
-      <label>Address (optional)
-        <input id="biz_addr" placeholder="Street or landmark" /></label><br />
-      <label>Latitude (optional)
-        <input id="biz_lat" placeholder="e.g., 24.8607" /></label><br />
-      <label>Longitude (optional)
-        <input id="biz_lon" placeholder="e.g., 67.0011" /></label><br />
-      <label>Website (optional)
-        <input id="biz_site" placeholder="https://example.com" /></label><br />
-
-      <div style="margin-top: 8px; display: flex; gap: 8px">
-        <button id="useLocationBtn">Auto-fill my location</button>
-        <button id="bizCreate">Create & Pay ₹2000</button>
-        <button id="bizClose" style="background: #ccc">Close</button>
+      <div class="modal-tabs">
+        <button class="modal-tab active" id="signupTab">New Business</button>
+        <button class="modal-tab" id="loginTab">Already Have Account</button>
       </div>
-      <div id="bizMsg" style="font-size: 13px; color: #444; margin-top: 8px"></div>
+
+      <!-- Signup Form -->
+      <div id="signupContent" class="tab-content active">
+        <h3 style="margin-bottom: 20px; text-align: center; color: #333;">Register Your Business</h3>
+        
+        <div class="form-group">
+          <label>Business Name</label>
+          <input id="biz_name" placeholder="Your business name" />
+        </div>
+        
+        <div class="form-group">
+          <label>Business Email</label>
+          <input id="biz_email" type="email" placeholder="owner@business.com" />
+        </div>
+        
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input id="biz_phone" type="tel" placeholder="10-digit phone number" />
+        </div>
+        
+        <div class="form-group">
+          <label>Business Type</label>
+          <select id="biz_type">
+            <option value="local">Local Business</option>
+            <option value="global">Global Business</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Categories</label>
+          <input id="biz_cat" placeholder="e.g., food, services, retail" />
+        </div>
+        
+        <div class="form-group">
+          <label>Services Offered</label>
+          <textarea id="biz_services" rows="3" placeholder="Describe your services, products, or what you offer customers..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Business Address (Optional)</label>
+          <input id="biz_addr" placeholder="Street address or landmark" />
+        </div>
+        
+        <div class="form-group">
+          <label>Website (Optional)</label>
+          <input id="biz_site" type="url" placeholder="https://yourwebsite.com" />
+        </div>
+
+        <input type="hidden" id="biz_lat" />
+        <input type="hidden" id="biz_lon" />
+
+        <div class="button-group">
+          <button id="useLocationBtn" class="btn-secondary">📍 Use My Location</button>
+          <button id="bizCreate">Register & Pay ₹2000</button>
+        </div>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginContent" class="tab-content">
+        <h3 style="margin-bottom: 20px; text-align: center; color: #333;">Business Owner Login</h3>
+        
+        <div class="form-group">
+          <label>Business Email</label>
+          <input id="login_email" type="email" placeholder="Your registered business email" />
+        </div>
+        
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input id="login_phone" type="tel" placeholder="Your registered phone number" />
+        </div>
+        
+        <div class="button-group">
+          <button id="loginBtn">Access Dashboard</button>
+          <button id="forgotBtn" class="btn-secondary">Forgot Details?</button>
+        </div>
+        
+        <div style="text-align: center; margin-top: 15px; color: #666; font-size: 14px;">
+          Don't have an account? <a href="#" onclick="switchToSignup()" style="color: #00bb55; text-decoration: none;">Register here</a>
+        </div>
+      </div>
+
+      <div class="button-group" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+        <button id="bizClose" class="btn-secondary">Close</button>
+      </div>
+
+      <div id="bizMsg" style="display: none;"></div>
     </div>
   </div>
 
@@ -104,17 +506,57 @@
     // Menu functionality
     const menu = document.getElementById("menu");
     const menuBtn = document.getElementById("menuBtn");
-    let open = false;
+    let menuOpen = false;
+    
     menuBtn.onclick = () => {
-      open = !open;
-      menu.style.display = open ? "block" : "none";
+      menuOpen = !menuOpen;
+      menu.style.display = menuOpen ? "block" : "none";
     };
 
-    // API Configuration
-    const API_BASE =
-      "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (menuOpen && !menu.contains(e.target) && !menuBtn.contains(e.target)) {
+        menuOpen = false;
+        menu.style.display = "none";
+      }
+    });
 
-    // Robust click tracker: sends business_id and click_type (accepts both "type" and "click_type" on backend)
+    // Modal tab switching
+    function switchToLogin() {
+      document.getElementById('signupTab').classList.remove('active');
+      document.getElementById('loginTab').classList.add('active');
+      document.getElementById('signupContent').classList.remove('active');
+      document.getElementById('loginContent').classList.add('active');
+    }
+
+    function switchToSignup() {
+      document.getElementById('loginTab').classList.remove('active');
+      document.getElementById('signupTab').classList.add('active');
+      document.getElementById('loginContent').classList.remove('active');
+      document.getElementById('signupContent').classList.add('active');
+    }
+
+    document.getElementById('signupTab').onclick = switchToSignup;
+    document.getElementById('loginTab').onclick = switchToLogin;
+
+    // API Configuration
+    const API_BASE = "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
+
+    // Message display utility
+    function showMessage(text, type = 'info') {
+      const msgDiv = document.getElementById('bizMsg');
+      msgDiv.textContent = text;
+      msgDiv.className = type;
+      msgDiv.style.display = 'block';
+      
+      if (type === 'success') {
+        setTimeout(() => {
+          msgDiv.style.display = 'none';
+        }, 5000);
+      }
+    }
+
+    // Robust click tracker
     function handleBusinessClick(businessId, clickType, url, query = "") {
       if (!businessId) {
         console.warn("handleBusinessClick called without businessId", { url, clickType, query });
@@ -122,13 +564,12 @@
         return;
       }
 
-      // send tracking asynchronously (non-blocking)
       fetch(`${API_BASE}/track_click`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           business_id: businessId,
-          type: clickType,    // backend accepts "type" or "click_type"
+          type: clickType,
           query: query
         })
       })
@@ -142,7 +583,6 @@
         })
         .catch((err) => console.error("track_click error", err));
 
-      // open external link immediately (tracking is fire-and-forget)
       if (url) {
         window.open(url, "_blank", "noopener");
       }
@@ -157,39 +597,34 @@
       const d = document.createElement("div");
       d.className = "msg " + (who === "user" ? "user" : "bot");
       if (who === "bot") {
-        d.innerHTML = marked.parse(text); // render markdown
-        interceptLinks(d); // 👈 rewrite links after rendering
+        d.innerHTML = marked.parse(text);
+        interceptLinks(d);
       } else {
-        d.textContent = text; // user messages stay plain
+        d.textContent = text;
       }
       chat.appendChild(d);
       chat.scrollTop = chat.scrollHeight;
     }
 
     function interceptLinks(container) {
-      // Rewrites anchors produced by chat so clicks go through your redirect (server can log)
       const links = container.querySelectorAll("a");
       links.forEach((link) => {
         try {
           const realUrl = link.getAttribute("href") || link.href || "";
           if (!realUrl) return;
 
-          // If backend included the business id in the anchor (preferred), read it
-          const bizId = link.dataset.bizId || link.dataset.businessId || link.getAttribute("data-biz-id") || link.getAttribute("data-business-id");
+          const bizId = link.dataset.bizId || link.dataset.businessId || 
+                       link.getAttribute("data-biz-id") || link.getAttribute("data-business-id");
 
-          // store original URL as data attr (for optional client-side tracking)
           link.dataset.originalUrl = realUrl;
 
-          // Build a redirect/tracking URL that your Lambda /redirect handler can log
           const encodedUrl = encodeURIComponent(realUrl);
           const sess = encodeURIComponent(sessionId);
           let redirectUrl = `${API_BASE.replace(/\/$/, "")}/redirect?session_id=${sess}&url=${encodedUrl}`;
           if (bizId) redirectUrl += `&business_id=${encodeURIComponent(bizId)}`;
 
-          // Replace href so user click triggers the server redirect (and server-side logging)
           link.setAttribute("href", redirectUrl);
           link.setAttribute("target", "_blank");
-          // flag for client-side delegation fallback
           link.dataset.trackClick = "1";
           if (bizId) link.dataset.bizId = bizId;
         } catch (e) {
@@ -198,56 +633,18 @@
       });
     }
 
-    // Optional: client-side non-blocking tracking fallback (use only if redirect doesn't log)
-    document.addEventListener("click", function (ev) {
-      const a = ev.target.closest && ev.target.closest('a[data-track-click]');
-      if (!a) return;
-
-      // If your /redirect endpoint already logs click using business_id and session_id, skip client-side send.
-      // Uncomment the following block only if you need client-side send as a backup.
-      /*
-      const bizId = a.dataset.bizId || null;
-      const originalUrl = a.dataset.originalUrl || a.href;
-      const payload = {
-        business_id: bizId,
-        type: 'website',
-        query: 'chat_link',
-        session_id: sessionId,
-        url: originalUrl,
-        ts: new Date().toISOString(),
-        ua: navigator.userAgent
-      };
-
-      try {
-        const body = JSON.stringify(payload);
-        if (navigator.sendBeacon) {
-          const blob = new Blob([body], { type: "application/json" });
-          navigator.sendBeacon(`${API_BASE.replace(/\/$/, "")}/track_click`, blob);
-        } else {
-          // keepalive fetch fallback
-          fetch(`${API_BASE.replace(/\/$/, "")}/track_click`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body,
-            keepalive: true
-          }).catch(() => {});
-        }
-      } catch (e) {
-        console.warn("client-side tracking fallback failed", e);
-      }
-      */
-    }, { passive: true });
-
-    // Store session_id in browser localStorage
+    // Session management
     let sessionId = localStorage.getItem("session_id");
     if (!sessionId) {
       sessionId = crypto.randomUUID();
       localStorage.setItem("session_id", sessionId);
     }
 
+    // Send message functionality
     sendBtn.onclick = async () => {
       const text = promptInput.value.trim();
       if (!text) return;
+      
       addMessage(text, "user");
       promptInput.value = "";
       addMessage("Thinking...", "bot");
@@ -255,9 +652,7 @@
       let loc = null;
       try {
         const pos = await new Promise((res, rej) =>
-          navigator.geolocation.getCurrentPosition(res, rej, {
-            timeout: 5000,
-          })
+          navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000 })
         );
         loc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
       } catch (e) { }
@@ -277,7 +672,7 @@
         });
         const data = await res.json();
 
-        // Remove last "Thinking..." message
+        // Remove "Thinking..." message
         const msgs = Array.from(document.getElementsByClassName("msg"));
         if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
 
@@ -285,14 +680,11 @@
       } catch (error) {
         const msgs = Array.from(document.getElementsByClassName("msg"));
         if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
-        addMessage(
-          "Sorry, there was an error processing your request.",
-          "bot"
-        );
+        addMessage("Sorry, there was an error processing your request.", "bot");
       }
     };
 
-    // Enter key support for chat
+    // Enter key support
     promptInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
         sendBtn.click();
@@ -308,50 +700,95 @@
       document.getElementById("bizModal").style.display = "none";
     };
 
+    // Location functionality
     document.getElementById("useLocationBtn").onclick = async () => {
-      document.getElementById("bizMsg").innerText = "Getting location…";
+      const btn = document.getElementById("useLocationBtn");
+      btn.textContent = "Getting location...";
+      btn.disabled = true;
+
       try {
         const pos = await new Promise((res, rej) =>
-          navigator.geolocation.getCurrentPosition(res, rej, {
-            timeout: 7000,
-          })
+          navigator.geolocation.getCurrentPosition(res, rej, { timeout: 7000 })
         );
         document.getElementById("biz_lat").value = pos.coords.latitude;
         document.getElementById("biz_lon").value = pos.coords.longitude;
-        document.getElementById("bizMsg").innerText = "Location filled";
+        showMessage("Location captured successfully!", "success");
+        btn.textContent = "✓ Location Added";
       } catch (e) {
-        document.getElementById("bizMsg").innerText =
-          "Could not get location. Enter manually.";
+        showMessage("Could not get location. Enter manually.", "error");
+        btn.textContent = "📍 Use My Location";
+        btn.disabled = false;
       }
     };
 
+    // Login functionality
+    document.getElementById("loginBtn").onclick = async () => {
+      const email = document.getElementById("login_email").value.trim();
+      const phone = document.getElementById("login_phone").value.trim();
+
+      if (!email || !phone) {
+        showMessage("Please enter both email and phone number", "error");
+        return;
+      }
+
+      const loginBtn = document.getElementById("loginBtn");
+      loginBtn.disabled = true;
+      loginBtn.textContent = "Checking...";
+
+      try {
+        const response = await fetch(`${API_BASE}/business/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, phone })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.business_id) {
+          localStorage.setItem("session_token", data.session_token);
+          localStorage.setItem("business_id", data.business_id);
+
+          showMessage("Login successful! Redirecting to dashboard...", "success");
+          setTimeout(() => {
+            window.location.href = `dashboard.html?business_id=${encodeURIComponent(data.business_id)}`;
+          }, 1500);
+        } else {
+          showMessage(data.error || "Login failed", "error");
+        }
+      } catch (error) {
+        showMessage("Connection error. Please try again.", "error");
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Access Dashboard";
+      }
+    };
+
+    // Signup functionality
     document.getElementById("bizCreate").onclick = async () => {
-      document.getElementById("bizMsg").innerText = "Creating signup...";
       const payload = {
-        name: document.getElementById("biz_name").value,
-        email: document.getElementById("biz_email").value,
-        phone: document.getElementById("biz_phone").value,
+        name: document.getElementById("biz_name").value.trim(),
+        email: document.getElementById("biz_email").value.trim(),
+        phone: document.getElementById("biz_phone").value.trim(),
         type: document.getElementById("biz_type").value,
-        categories: document.getElementById("biz_cat").value,
-        services: document.getElementById("biz_services").value, // NEW: services field
-        address: document.getElementById("biz_addr").value,
+        categories: document.getElementById("biz_cat").value.trim(),
+        services: document.getElementById("biz_services").value.trim(),
+        address: document.getElementById("biz_addr").value.trim(),
         lat: document.getElementById("biz_lat").value || null,
         lon: document.getElementById("biz_lon").value || null,
-        website: document.getElementById("biz_site").value || null,
+        website: document.getElementById("biz_site").value.trim() || null,
       };
 
-      // Validation
       if (!payload.name || !payload.phone || !payload.email) {
-        document.getElementById("bizMsg").innerText =
-          "Please enter Name, Phone, Email.";
+        showMessage("Please enter Name, Phone, and Email.", "error");
         return;
       }
 
       if (!payload.services) {
-        document.getElementById("bizMsg").innerText =
-          "Please describe the services you offer.";
+        showMessage("Please describe the services you offer.", "error");
         return;
       }
+
+      showMessage("Creating signup...", "info");
 
       try {
         const resp = await fetch(API_BASE + "/business/signup", {
@@ -362,43 +799,43 @@
         const j = await resp.json();
 
         if (!j || !j.order_id) {
-          document.getElementById("bizMsg").innerText =
-            "Server error creating order: " + (j?.error || "unknown");
+          showMessage("Server error creating order: " + (j?.error || "unknown"), "error");
           return;
         }
 
-        // Open Razorpay Checkout
+        localStorage.setItem("pending_business_id", j.business_id);
+
         const options = {
           key: j.razorpay_key,
           order_id: j.order_id,
           name: payload.name,
           description: "Business subscription ₹2000 / month",
           handler: async function (razorResp) {
-            document.getElementById("bizMsg").innerText =
-              "Verifying payment...";
+            showMessage("Payment successful! Verifying...", "success");
             try {
-              const verify = await fetch(
-                API_BASE + "/business/verify_payment",
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    razorpay_payment_id: razorResp.razorpay_payment_id,
-                    business_id: j.business_id,
-                  }),
-                }
-              );
+              const verify = await fetch(API_BASE + "/business/verify_payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  razorpay_payment_id: razorResp.razorpay_payment_id,
+                  business_id: j.business_id,
+                }),
+              });
               const v = await verify.json();
               if (v && v.ok) {
-                document.getElementById("bizMsg").innerText =
-                  "Payment successful. Your business is active for 30 days.";
+                localStorage.setItem("business_id", j.business_id);
+                localStorage.setItem("business_email", payload.email);
+                localStorage.removeItem("pending_business_id");
+                
+                showMessage("Payment successful! Your business is active for 30 days. Redirecting...", "success");
+                setTimeout(() => {
+                  window.location.href = `dashboard.html?business_id=${j.business_id}`;
+                }, 2000);
               } else {
-                document.getElementById("bizMsg").innerText =
-                  "Payment verification failed. Contact support.";
+                showMessage("Payment verification failed. Contact support.", "error");
               }
             } catch (error) {
-              document.getElementById("bizMsg").innerText =
-                "Payment verification error. Contact support.";
+              showMessage("Payment verification error. Contact support.", "error");
             }
           },
           prefill: {
@@ -406,13 +843,12 @@
             email: payload.email,
             contact: payload.phone,
           },
-          theme: { color: "#0b5" },
+          theme: { color: "#00bb55" },
         };
         const rzp = new Razorpay(options);
         rzp.open();
       } catch (e) {
-        document.getElementById("bizMsg").innerText =
-          "Network/server error: " + e.message;
+        showMessage("Network/server error: " + e.message, "error");
       }
     };
 
@@ -420,7 +856,7 @@
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("/helperai-pwa/sw.js", { scope: "/helperai-pwa/" })
-        .then(() => console.log("SW registered with scope /helperai-pwa/"))
+        .then(() => console.log("SW registered"))
         .catch((err) => console.error("SW failed", err));
     }
 
@@ -434,36 +870,22 @@
       if (installBtn) installBtn.style.display = "block";
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const installBtn = document.getElementById('installBtn');
-      // Check if the button exists before adding the listener
-      if (installBtn) {
-        installBtn.addEventListener('click', async () => {
-          if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === "accepted") {
-              console.log("PWA installed");
-            }
-            deferredPrompt = null;
-            installBtn.style.display = "none";
+    if (installBtn) {
+      installBtn.addEventListener("click", async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === "accepted") {
+            console.log("PWA installed");
           }
-        });
-      } else {
-        console.warn("Element with ID 'installBtn' not found.");
-      }
-    });
-
-    // Debug helper: let dev manually trigger prompt if deferredPrompt is set
-    window.triggerInstallPrompt = () => {
-      if (deferredPrompt) deferredPrompt.prompt();
-      else console.warn('deferredPrompt not set yet');
-    };
+          deferredPrompt = null;
+          installBtn.style.display = "none";
+        }
+      });
+    }
   </script>
 
-  <button id="installBtn" style="display: none; position: fixed; bottom: 10px; right: 10px">
-    Install App
-  </button>
+  <button id="installBtn" style="display: none;">Install App</button>
 </body>
 
 </html>
