@@ -1,30 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>HelperAI</title>
 
-    <!-- Use absolute path so browser finds manifest at the app scope -->
-    <link rel="manifest" href="/helperai-pwa/manifest.json" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HelperAI</title>
 
-    <!-- PWA & mobile meta -->
-    <meta name="theme-color" content="#00bb55" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <!-- Use absolute path so browser finds manifest at the app scope -->
+  <link rel="manifest" href="/helperai-pwa/manifest.json" />
 
-    <!-- Apple icons (optional but helps installability on iOS) -->
-    <link rel="apple-touch-icon" href="/helperai-pwa/icons/icon-192x192.png" />
-    <link rel="icon" href="/helperai-pwa/logo.png" />
+  <!-- PWA & mobile meta -->
+  <meta name="theme-color" content="#00bb55" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
-    <link rel="stylesheet" href="style.css" />
-  </head>
+  <!-- Apple icons (optional but helps installability on iOS) -->
+  <link rel="apple-touch-icon" href="/helperai-pwa/icons/icon-192x192.png" />
+  <link rel="icon" href="/helperai-pwa/logo.png" />
 
-  <body>
-    <nav
-      id="menu"
-      style="
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <nav id="menu" style="
         display: none;
         position: fixed;
         top: 0;
@@ -34,458 +33,437 @@
         height: 100%;
         box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
         padding: 12px;
-      "
-    >
-      <a href="about.html">About Us</a><br />
-      <a href="pricing.html">Pricing</a><br />
-      <a href="shipping.html">Shipping</a><br />
-      <a href="terms.html">Terms & Conditions</a><br />
-      <a href="privacy.html">Privacy Policy</a><br />
-      <a href="refund.html">Refund Policy</a><br />
-      <a href="contact.html">Contact</a><br />
-    </nav>
-    <button id="menuBtn" style="position: fixed; top: 10px; left: 10px">
-      ☰
-    </button>
+      ">
+    <a href="about.html">About Us</a><br />
+    <a href="pricing.html">Pricing</a><br />
+    <a href="shipping.html">Shipping</a><br />
+    <a href="terms.html">Terms & Conditions</a><br />
+    <a href="privacy.html">Privacy Policy</a><br />
+    <a href="refund.html">Refund Policy</a><br />
+    <a href="contact.html">Contact</a><br />
+  </nav>
+  <button id="menuBtn" style="position: fixed; top: 10px; left: 10px">
+    ☰
+  </button>
 
-    <header>
-      <div style="display: flex; align-items: center; gap: 12px">
-        <img src="logo.png" alt="HelperAI Logo" class="logo" />
-        <strong>HelperAI</strong>
-      </div>
-      <div><button id="businessBtn">Business</button></div>
-    </header>
-
-    <div id="chat"></div>
-    <div id="inputBar">
-      <input id="prompt" placeholder="Ask anything..." />
-      <button id="sendBtn">Send</button>
+  <header>
+    <div style="display: flex; align-items: center; gap: 12px">
+      <img src="logo.png" alt="HelperAI Logo" class="logo" />
+      <strong>HelperAI</strong>
     </div>
+    <div><button id="businessBtn">Business</button></div>
+  </header>
 
-    <div id="bizModal">
-      <div class="content">
-        <h3>Business Signup</h3>
-        <label>Name <input id="biz_name" placeholder="Shop name" /></label
-        ><br />
-        <label
-          >Email <input id="biz_email" placeholder="owner@example.com" /></label
-        ><br />
-        <label
-          >Phone <input id="biz_phone" placeholder="10-digit number" /></label
-        ><br />
-        <label
-          >Type
-          <select id="biz_type">
-            <option>local</option>
-            <option>global</option>
-          </select> </label
-        ><br />
-        <label
-          >Categories
-          <input id="biz_cat" placeholder="e.g., food,services" /></label
-        ><br />
+  <div id="chat"></div>
+  <div id="inputBar">
+    <input id="prompt" placeholder="Ask anything..." />
+    <button id="sendBtn">Send</button>
+  </div>
 
-        <!-- NEW: Services/Offerings field -->
-        <label
-          >Services Offered
-          <textarea
-            id="biz_services"
-            placeholder="Describe your services, products, or what you offer customers..."
-            rows="3"
-            style="width: 100%; resize: vertical"
-          ></textarea></label
-        ><br />
+  <div id="bizModal">
+    <div class="content">
+      <h3>Business Signup</h3>
+      <label>Name <input id="biz_name" placeholder="Shop name" /></label><br />
+      <label>Email <input id="biz_email" placeholder="owner@example.com" /></label><br />
+      <label>Phone <input id="biz_phone" placeholder="10-digit number" /></label><br />
+      <label>Type
+        <select id="biz_type">
+          <option>local</option>
+          <option>global</option>
+        </select> </label><br />
+      <label>Categories
+        <input id="biz_cat" placeholder="e.g., food,services" /></label><br />
 
-        <label
-          >Address (optional)
-          <input id="biz_addr" placeholder="Street or landmark" /></label
-        ><br />
-        <label
-          >Latitude (optional)
-          <input id="biz_lat" placeholder="e.g., 24.8607" /></label
-        ><br />
-        <label
-          >Longitude (optional)
-          <input id="biz_lon" placeholder="e.g., 67.0011" /></label
-        ><br />
-        <label
-          >Website (optional)
-          <input id="biz_site" placeholder="https://example.com" /></label
-        ><br />
+      <!-- NEW: Services/Offerings field -->
+      <label>Services Offered
+        <textarea id="biz_services" placeholder="Describe your services, products, or what you offer customers..."
+          rows="3" style="width: 100%; resize: vertical"></textarea></label><br />
 
-        <div style="margin-top: 8px; display: flex; gap: 8px">
-          <button id="useLocationBtn">Auto-fill my location</button>
-          <button id="bizCreate">Create & Pay ₹2000</button>
-          <button id="bizClose" style="background: #ccc">Close</button>
-        </div>
-        <div
-          id="bizMsg"
-          style="font-size: 13px; color: #444; margin-top: 8px"
-        ></div>
+      <label>Address (optional)
+        <input id="biz_addr" placeholder="Street or landmark" /></label><br />
+      <label>Latitude (optional)
+        <input id="biz_lat" placeholder="e.g., 24.8607" /></label><br />
+      <label>Longitude (optional)
+        <input id="biz_lon" placeholder="e.g., 67.0011" /></label><br />
+      <label>Website (optional)
+        <input id="biz_site" placeholder="https://example.com" /></label><br />
+
+      <div style="margin-top: 8px; display: flex; gap: 8px">
+        <button id="useLocationBtn">Auto-fill my location</button>
+        <button id="bizCreate">Create & Pay ₹2000</button>
+        <button id="bizClose" style="background: #ccc">Close</button>
       </div>
+      <div id="bizMsg" style="font-size: 13px; color: #444; margin-top: 8px"></div>
     </div>
+  </div>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <script>
-      // Menu functionality
-      const menu = document.getElementById("menu");
-      const menuBtn = document.getElementById("menuBtn");
-      let open = false;
-      menuBtn.onclick = () => {
-        open = !open;
-        menu.style.display = open ? "block" : "none";
+  <script>
+    // Menu functionality
+    const menu = document.getElementById("menu");
+    const menuBtn = document.getElementById("menuBtn");
+    let open = false;
+    menuBtn.onclick = () => {
+      open = !open;
+      menu.style.display = open ? "block" : "none";
+    };
+
+    // API Configuration
+    const API_BASE =
+      "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
+
+    // Robust click tracker: sends business_id and click_type (accepts both "type" and "click_type" on backend)
+    function handleBusinessClick(businessId, clickType, url, query = "") {
+      if (!businessId) {
+        console.warn("handleBusinessClick called without businessId", { url, clickType, query });
+        if (url) window.open(url, "_blank", "noopener");
+        return;
+      }
+
+      // send tracking asynchronously (non-blocking)
+      fetch(`${API_BASE}/track_click`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          business_id: businessId,
+          type: clickType,    // backend accepts "type" or "click_type"
+          query: query
+        })
+      })
+        .then(async (res) => {
+          const body = await res.text().catch(() => "");
+          if (!res.ok) {
+            console.error("track_click failed", res.status, body);
+          } else {
+            console.log("track_click success", businessId, clickType);
+          }
+        })
+        .catch((err) => console.error("track_click error", err));
+
+      // open external link immediately (tracking is fire-and-forget)
+      if (url) {
+        window.open(url, "_blank", "noopener");
+      }
+    }
+
+    // Chat functionality
+    const chat = document.getElementById("chat");
+    const promptInput = document.getElementById("prompt");
+    const sendBtn = document.getElementById("sendBtn");
+
+    function addMessage(text, who = "bot") {
+      const d = document.createElement("div");
+      d.className = "msg " + (who === "user" ? "user" : "bot");
+      if (who === "bot") {
+        d.innerHTML = marked.parse(text); // render markdown
+        interceptLinks(d); // 👈 rewrite links after rendering
+      } else {
+        d.textContent = text; // user messages stay plain
+      }
+      chat.appendChild(d);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function interceptLinks(container) {
+      // Rewrites anchors produced by chat so clicks go through your redirect (server can log)
+      const links = container.querySelectorAll("a");
+      links.forEach((link) => {
+        try {
+          const realUrl = link.getAttribute("href") || link.href || "";
+          if (!realUrl) return;
+
+          // If backend included the business id in the anchor (preferred), read it
+          const bizId = link.dataset.bizId || link.dataset.businessId || link.getAttribute("data-biz-id") || link.getAttribute("data-business-id");
+
+          // store original URL as data attr (for optional client-side tracking)
+          link.dataset.originalUrl = realUrl;
+
+          // Build a redirect/tracking URL that your Lambda /redirect handler can log
+          const encodedUrl = encodeURIComponent(realUrl);
+          const sess = encodeURIComponent(sessionId);
+          let redirectUrl = `${API_BASE.replace(/\/$/, "")}/redirect?session_id=${sess}&url=${encodedUrl}`;
+          if (bizId) redirectUrl += `&business_id=${encodeURIComponent(bizId)}`;
+
+          // Replace href so user click triggers the server redirect (and server-side logging)
+          link.setAttribute("href", redirectUrl);
+          link.setAttribute("target", "_blank");
+          // flag for client-side delegation fallback
+          link.dataset.trackClick = "1";
+          if (bizId) link.dataset.bizId = bizId;
+        } catch (e) {
+          console.error("interceptLinks error", e);
+        }
+      });
+    }
+
+    // Optional: client-side non-blocking tracking fallback (use only if redirect doesn't log)
+    document.addEventListener("click", function (ev) {
+      const a = ev.target.closest && ev.target.closest('a[data-track-click]');
+      if (!a) return;
+
+      // If your /redirect endpoint already logs click using business_id and session_id, skip client-side send.
+      // Uncomment the following block only if you need client-side send as a backup.
+      /*
+      const bizId = a.dataset.bizId || null;
+      const originalUrl = a.dataset.originalUrl || a.href;
+      const payload = {
+        business_id: bizId,
+        type: 'website',
+        query: 'chat_link',
+        session_id: sessionId,
+        url: originalUrl,
+        ts: new Date().toISOString(),
+        ua: navigator.userAgent
       };
 
-      // API Configuration
-      const API_BASE =
-        "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
-
-      // Robust click tracker: sends business_id and click_type (accepts both "type" and "click_type" on backend)
-      function handleBusinessClick(businessId, clickType, url, query = "") {
-        if (!businessId) {
-          console.warn("handleBusinessClick called without businessId", { url, clickType, query });
-          if (url) window.open(url, "_blank", "noopener");
-          return;
+      try {
+        const body = JSON.stringify(payload);
+        if (navigator.sendBeacon) {
+          const blob = new Blob([body], { type: "application/json" });
+          navigator.sendBeacon(`${API_BASE.replace(/\/$/, "")}/track_click`, blob);
+        } else {
+          // keepalive fetch fallback
+          fetch(`${API_BASE.replace(/\/$/, "")}/track_click`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body,
+            keepalive: true
+          }).catch(() => {});
         }
+      } catch (e) {
+        console.warn("client-side tracking fallback failed", e);
+      }
+      */
+    }, { passive: true });
 
-        // send tracking asynchronously (non-blocking)
-        fetch(`${API_BASE}/track_click`, {
+    // Store session_id in browser localStorage
+    let sessionId = localStorage.getItem("session_id");
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      localStorage.setItem("session_id", sessionId);
+    }
+
+    sendBtn.onclick = async () => {
+      const text = promptInput.value.trim();
+      if (!text) return;
+      addMessage(text, "user");
+      promptInput.value = "";
+      addMessage("Thinking...", "bot");
+
+      let loc = null;
+      try {
+        const pos = await new Promise((res, rej) =>
+          navigator.geolocation.getCurrentPosition(res, rej, {
+            timeout: 5000,
+          })
+        );
+        loc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+      } catch (e) { }
+
+      const payload = {
+        session_id: sessionId,
+        prompt: text,
+        lat: loc?.lat,
+        lon: loc?.lon,
+      };
+
+      try {
+        const res = await fetch(API_BASE + "/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            business_id: businessId,
-            type: clickType,    // backend accepts "type" or "click_type"
-            query: query
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+
+        // Remove last "Thinking..." message
+        const msgs = Array.from(document.getElementsByClassName("msg"));
+        if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
+
+        addMessage(data.answer || "No response", "bot");
+      } catch (error) {
+        const msgs = Array.from(document.getElementsByClassName("msg"));
+        if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
+        addMessage(
+          "Sorry, there was an error processing your request.",
+          "bot"
+        );
+      }
+    };
+
+    // Enter key support for chat
+    promptInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        sendBtn.click();
+      }
+    });
+
+    // Business modal functionality
+    document.getElementById("businessBtn").onclick = () => {
+      document.getElementById("bizModal").style.display = "flex";
+    };
+
+    document.getElementById("bizClose").onclick = () => {
+      document.getElementById("bizModal").style.display = "none";
+    };
+
+    document.getElementById("useLocationBtn").onclick = async () => {
+      document.getElementById("bizMsg").innerText = "Getting location…";
+      try {
+        const pos = await new Promise((res, rej) =>
+          navigator.geolocation.getCurrentPosition(res, rej, {
+            timeout: 7000,
           })
-        })
-          .then(async (res) => {
-            const body = await res.text().catch(() => "");
-            if (!res.ok) {
-              console.error("track_click failed", res.status, body);
-            } else {
-              console.log("track_click success", businessId, clickType);
+        );
+        document.getElementById("biz_lat").value = pos.coords.latitude;
+        document.getElementById("biz_lon").value = pos.coords.longitude;
+        document.getElementById("bizMsg").innerText = "Location filled";
+      } catch (e) {
+        document.getElementById("bizMsg").innerText =
+          "Could not get location. Enter manually.";
+      }
+    };
+
+    document.getElementById("bizCreate").onclick = async () => {
+      document.getElementById("bizMsg").innerText = "Creating signup...";
+      const payload = {
+        name: document.getElementById("biz_name").value,
+        email: document.getElementById("biz_email").value,
+        phone: document.getElementById("biz_phone").value,
+        type: document.getElementById("biz_type").value,
+        categories: document.getElementById("biz_cat").value,
+        services: document.getElementById("biz_services").value, // NEW: services field
+        address: document.getElementById("biz_addr").value,
+        lat: document.getElementById("biz_lat").value || null,
+        lon: document.getElementById("biz_lon").value || null,
+        website: document.getElementById("biz_site").value || null,
+      };
+
+      // Validation
+      if (!payload.name || !payload.phone || !payload.email) {
+        document.getElementById("bizMsg").innerText =
+          "Please enter Name, Phone, Email.";
+        return;
+      }
+
+      if (!payload.services) {
+        document.getElementById("bizMsg").innerText =
+          "Please describe the services you offer.";
+        return;
+      }
+
+      try {
+        const resp = await fetch(API_BASE + "/business/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const j = await resp.json();
+
+        if (!j || !j.order_id) {
+          document.getElementById("bizMsg").innerText =
+            "Server error creating order: " + (j?.error || "unknown");
+          return;
+        }
+
+        // Open Razorpay Checkout
+        const options = {
+          key: j.razorpay_key,
+          order_id: j.order_id,
+          name: payload.name,
+          description: "Business subscription ₹2000 / month",
+          handler: async function (razorResp) {
+            document.getElementById("bizMsg").innerText =
+              "Verifying payment...";
+            try {
+              const verify = await fetch(
+                API_BASE + "/business/verify_payment",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    razorpay_payment_id: razorResp.razorpay_payment_id,
+                    business_id: j.business_id,
+                  }),
+                }
+              );
+              const v = await verify.json();
+              if (v && v.ok) {
+                document.getElementById("bizMsg").innerText =
+                  "Payment successful. Your business is active for 30 days.";
+              } else {
+                document.getElementById("bizMsg").innerText =
+                  "Payment verification failed. Contact support.";
+              }
+            } catch (error) {
+              document.getElementById("bizMsg").innerText =
+                "Payment verification error. Contact support.";
             }
-          })
-          .catch((err) => console.error("track_click error", err));
-
-        // open external link immediately (tracking is fire-and-forget)
-        if (url) {
-          window.open(url, "_blank", "noopener");
-        }
+          },
+          prefill: {
+            name: payload.name,
+            email: payload.email,
+            contact: payload.phone,
+          },
+          theme: { color: "#0b5" },
+        };
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch (e) {
+        document.getElementById("bizMsg").innerText =
+          "Network/server error: " + e.message;
       }
+    };
 
-      // Chat functionality
-      const chat = document.getElementById("chat");
-      const promptInput = document.getElementById("prompt");
-      const sendBtn = document.getElementById("sendBtn");
+    // PWA functionality
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/helperai-pwa/sw.js", { scope: "/helperai-pwa/" })
+        .then(() => console.log("SW registered with scope /helperai-pwa/"))
+        .catch((err) => console.error("SW failed", err));
+    }
 
-      function addMessage(text, who = "bot") {
-        const d = document.createElement("div");
-        d.className = "msg " + (who === "user" ? "user" : "bot");
-        if (who === "bot") {
-          d.innerHTML = marked.parse(text); // render markdown
-          interceptLinks(d); // 👈 rewrite links after rendering
-        } else {
-          d.textContent = text; // user messages stay plain
-        }
-        chat.appendChild(d);
-        chat.scrollTop = chat.scrollHeight;
-      }
+    // PWA install prompt
+    let deferredPrompt;
+    const installBtn = document.getElementById("installBtn");
 
-      function interceptLinks(container) {
-        // Rewrites anchors produced by chat so clicks go through your redirect (server can log)
-        const links = container.querySelectorAll("a");
-        links.forEach((link) => {
-          try {
-            const realUrl = link.getAttribute("href") || link.href || "";
-            if (!realUrl) return;
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (installBtn) installBtn.style.display = "block";
+    });
 
-            // If backend included the business id in the anchor (preferred), read it
-            const bizId = link.dataset.bizId || link.dataset.businessId || link.getAttribute("data-biz-id") || link.getAttribute("data-business-id");
-
-            // store original URL as data attr (for optional client-side tracking)
-            link.dataset.originalUrl = realUrl;
-
-            // Build a redirect/tracking URL that your Lambda /redirect handler can log
-            const encodedUrl = encodeURIComponent(realUrl);
-            const sess = encodeURIComponent(sessionId);
-            let redirectUrl = `${API_BASE.replace(/\/$/, "")}/redirect?session_id=${sess}&url=${encodedUrl}`;
-            if (bizId) redirectUrl += `&business_id=${encodeURIComponent(bizId)}`;
-
-            // Replace href so user click triggers the server redirect (and server-side logging)
-            link.setAttribute("href", redirectUrl);
-            link.setAttribute("target", "_blank");
-            // flag for client-side delegation fallback
-            link.dataset.trackClick = "1";
-            if (bizId) link.dataset.bizId = bizId;
-          } catch (e) {
-            console.error("interceptLinks error", e);
+    document.addEventListener('DOMContentLoaded', () => {
+      const installBtn = document.getElementById('installBtn');
+      // Check if the button exists before adding the listener
+      if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === "accepted") {
+              console.log("PWA installed");
+            }
+            deferredPrompt = null;
+            installBtn.style.display = "none";
           }
         });
+      } else {
+        console.warn("Element with ID 'installBtn' not found.");
       }
+    });
 
-      // Optional: client-side non-blocking tracking fallback (use only if redirect doesn't log)
-      document.addEventListener("click", function (ev) {
-        const a = ev.target.closest && ev.target.closest('a[data-track-click]');
-        if (!a) return;
+    // Debug helper: let dev manually trigger prompt if deferredPrompt is set
+    window.triggerInstallPrompt = () => {
+      if (deferredPrompt) deferredPrompt.prompt();
+      else console.warn('deferredPrompt not set yet');
+    };
+  </script>
 
-        // If your /redirect endpoint already logs click using business_id and session_id, skip client-side send.
-        // Uncomment the following block only if you need client-side send as a backup.
-        /*
-        const bizId = a.dataset.bizId || null;
-        const originalUrl = a.dataset.originalUrl || a.href;
-        const payload = {
-          business_id: bizId,
-          type: 'website',
-          query: 'chat_link',
-          session_id: sessionId,
-          url: originalUrl,
-          ts: new Date().toISOString(),
-          ua: navigator.userAgent
-        };
+  <button id="installBtn" style="display: none; position: fixed; bottom: 10px; right: 10px">
+    Install App
+  </button>
+</body>
 
-        try {
-          const body = JSON.stringify(payload);
-          if (navigator.sendBeacon) {
-            const blob = new Blob([body], { type: "application/json" });
-            navigator.sendBeacon(`${API_BASE.replace(/\/$/, "")}/track_click`, blob);
-          } else {
-            // keepalive fetch fallback
-            fetch(`${API_BASE.replace(/\/$/, "")}/track_click`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body,
-              keepalive: true
-            }).catch(() => {});
-          }
-        } catch (e) {
-          console.warn("client-side tracking fallback failed", e);
-        }
-        */
-      }, { passive: true });
-
-      // Store session_id in browser localStorage
-      let sessionId = localStorage.getItem("session_id");
-      if (!sessionId) {
-        sessionId = crypto.randomUUID();
-        localStorage.setItem("session_id", sessionId);
-      }
-
-      sendBtn.onclick = async () => {
-        const text = promptInput.value.trim();
-        if (!text) return;
-        addMessage(text, "user");
-        promptInput.value = "";
-        addMessage("Thinking...", "bot");
-
-        let loc = null;
-        try {
-          const pos = await new Promise((res, rej) =>
-            navigator.geolocation.getCurrentPosition(res, rej, {
-              timeout: 5000,
-            })
-          );
-          loc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
-        } catch (e) {}
-
-        const payload = {
-          session_id: sessionId,
-          prompt: text,
-          lat: loc?.lat,
-          lon: loc?.lon,
-        };
-
-        try {
-          const res = await fetch(API_BASE + "/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          const data = await res.json();
-
-          // Remove last "Thinking..." message
-          const msgs = Array.from(document.getElementsByClassName("msg"));
-          if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
-
-          addMessage(data.answer || "No response", "bot");
-        } catch (error) {
-          const msgs = Array.from(document.getElementsByClassName("msg"));
-          if (msgs.length) chat.removeChild(msgs[msgs.length - 1]);
-          addMessage(
-            "Sorry, there was an error processing your request.",
-            "bot"
-          );
-        }
-      };
-
-      // Enter key support for chat
-      promptInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") {
-          sendBtn.click();
-        }
-      });
-
-      // Business modal functionality
-      document.getElementById("businessBtn").onclick = () => {
-        document.getElementById("bizModal").style.display = "flex";
-      };
-
-      document.getElementById("bizClose").onclick = () => {
-        document.getElementById("bizModal").style.display = "none";
-      };
-
-      document.getElementById("useLocationBtn").onclick = async () => {
-        document.getElementById("bizMsg").innerText = "Getting location…";
-        try {
-          const pos = await new Promise((res, rej) =>
-            navigator.geolocation.getCurrentPosition(res, rej, {
-              timeout: 7000,
-            })
-          );
-          document.getElementById("biz_lat").value = pos.coords.latitude;
-          document.getElementById("biz_lon").value = pos.coords.longitude;
-          document.getElementById("bizMsg").innerText = "Location filled";
-        } catch (e) {
-          document.getElementById("bizMsg").innerText =
-            "Could not get location. Enter manually.";
-        }
-      };
-
-      document.getElementById("bizCreate").onclick = async () => {
-        document.getElementById("bizMsg").innerText = "Creating signup...";
-        const payload = {
-          name: document.getElementById("biz_name").value,
-          email: document.getElementById("biz_email").value,
-          phone: document.getElementById("biz_phone").value,
-          type: document.getElementById("biz_type").value,
-          categories: document.getElementById("biz_cat").value,
-          services: document.getElementById("biz_services").value, // NEW: services field
-          address: document.getElementById("biz_addr").value,
-          lat: document.getElementById("biz_lat").value || null,
-          lon: document.getElementById("biz_lon").value || null,
-          website: document.getElementById("biz_site").value || null,
-        };
-
-        // Validation
-        if (!payload.name || !payload.phone || !payload.email) {
-          document.getElementById("bizMsg").innerText =
-            "Please enter Name, Phone, Email.";
-          return;
-        }
-
-        if (!payload.services) {
-          document.getElementById("bizMsg").innerText =
-            "Please describe the services you offer.";
-          return;
-        }
-
-        try {
-          const resp = await fetch(API_BASE + "/business/signup", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          const j = await resp.json();
-
-          if (!j || !j.order_id) {
-            document.getElementById("bizMsg").innerText =
-              "Server error creating order: " + (j?.error || "unknown");
-            return;
-          }
-
-          // Open Razorpay Checkout
-          const options = {
-            key: j.razorpay_key,
-            order_id: j.order_id,
-            name: payload.name,
-            description: "Business subscription ₹2000 / month",
-            handler: async function (razorResp) {
-              document.getElementById("bizMsg").innerText =
-                "Verifying payment...";
-              try {
-                const verify = await fetch(
-                  API_BASE + "/business/verify_payment",
-                  {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      razorpay_payment_id: razorResp.razorpay_payment_id,
-                      business_id: j.business_id,
-                    }),
-                  }
-                );
-                const v = await verify.json();
-                if (v && v.ok) {
-                  document.getElementById("bizMsg").innerText =
-                    "Payment successful. Your business is active for 30 days.";
-                } else {
-                  document.getElementById("bizMsg").innerText =
-                    "Payment verification failed. Contact support.";
-                }
-              } catch (error) {
-                document.getElementById("bizMsg").innerText =
-                  "Payment verification error. Contact support.";
-              }
-            },
-            prefill: {
-              name: payload.name,
-              email: payload.email,
-              contact: payload.phone,
-            },
-            theme: { color: "#0b5" },
-          };
-          const rzp = new Razorpay(options);
-          rzp.open();
-        } catch (e) {
-          document.getElementById("bizMsg").innerText =
-            "Network/server error: " + e.message;
-        }
-      };
-
-      // PWA functionality
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("/helperai-pwa/sw.js", { scope: "/helperai-pwa/" })
-          .then(() => console.log("SW registered with scope /helperai-pwa/"))
-          .catch((err) => console.error("SW failed", err));
-      }
-
-      // PWA install prompt
-      let deferredPrompt;
-      const installBtn = document.getElementById("installBtn");
-
-      window.addEventListener("beforeinstallprompt", (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        if (installBtn) installBtn.style.display = "block";
-      });
-
-      installBtn.addEventListener("click", async () => {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          const { outcome } = await deferredPrompt.userChoice;
-          if (outcome === "accepted") {
-            console.log("PWA installed");
-          }
-          deferredPrompt = null;
-          installBtn.style.display = "none";
-        }
-      });
-
-      // Debug helper: let dev manually trigger prompt if deferredPrompt is set
-      window.triggerInstallPrompt = () => {
-        if (deferredPrompt) deferredPrompt.prompt();
-        else console.warn('deferredPrompt not set yet');
-      };
-    </script>
-
-    <button
-      id="installBtn"
-      style="display: none; position: fixed; bottom: 10px; right: 10px"
-    >
-      Install App
-    </button>
-    </body>
 </html>
