@@ -131,7 +131,7 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-  
+
     }
 
     .msg {
@@ -144,8 +144,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .msg.user {
@@ -340,27 +347,27 @@
       header {
         padding: 10px 15px;
       }
-      
+
       .nav-buttons {
         gap: 5px;
       }
-      
+
       button {
         padding: 8px 16px;
         font-size: 14px;
       }
-      
+
       #chat {
         margin: 10px;
         padding: 15px;
         height: calc(100vh - 160px);
       }
-      
+
       #inputBar {
         width: 95%;
         padding: 10px;
       }
-      
+
       #bizModal .content {
         padding: 20px;
         margin: 10px;
@@ -379,7 +386,7 @@
     <a href="refund.html">Refund Policy</a>
     <a href="contact.html">Contact</a>
   </nav>
-  
+
   <button id="menuBtn">☰</button>
 
   <header>
@@ -394,7 +401,8 @@
 
   <div id="chat">
     <div class="msg bot">
-      Welcome to HelperAI! I'm your personal AI assistant. I can help you find local businesses, answer questions, and provide recommendations based on your location. What would you like to know today?
+      Welcome to HelperAI! I'm your personal AI assistant. I can help you find local businesses, answer questions, and
+      provide recommendations based on your location. What would you like to know today?
     </div>
   </div>
 
@@ -414,22 +422,22 @@
       <!-- Signup Form -->
       <div id="signupContent" class="tab-content active">
         <h3 style="margin-bottom: 20px; text-align: center; color: #333;">Register Your Business</h3>
-        
+
         <div class="form-group">
           <label>Business Name</label>
           <input id="biz_name" placeholder="Your business name" />
         </div>
-        
+
         <div class="form-group">
           <label>Business Email</label>
           <input id="biz_email" type="email" placeholder="owner@business.com" />
         </div>
-        
+
         <div class="form-group">
           <label>Phone Number</label>
           <input id="biz_phone" type="tel" placeholder="10-digit phone number" />
         </div>
-        
+
         <div class="form-group">
           <label>Business Type</label>
           <select id="biz_type">
@@ -437,18 +445,19 @@
             <option value="global">Global Business</option>
           </select>
         </div>
-        
+
         <div class="form-group">
           <label>Categories</label>
           <input id="biz_cat" placeholder="e.g., food, services, retail" />
         </div>
-        
+
         <div class="form-group">
           <label>Services Offered</label>
-          <textarea id="biz_services" rows="3" placeholder="Describe your services, products, or what you offer customers..."></textarea>
+          <textarea id="biz_services" rows="3"
+            placeholder="Describe your services, products, or what you offer customers..."></textarea>
         </div>
 
-        
+
         <div class="form-group">
           <label>Business Address (Optional)</label>
           <input id="biz_addr" placeholder="Street address or landmark" />
@@ -456,15 +465,15 @@
 
         <div class="form-group">
           <label>Latitude (optional)
-          <input id="biz_lat" placeholder="e.g., 24.8607" /></label><br />
+            <input id="biz_lat" placeholder="e.g., 24.8607" /></label><br />
         </div>
 
         <div class="form-group">
           <label>Longitude (optional)
-          <input id="biz_lon" placeholder="e.g., 67.0011" /></label><br />
+            <input id="biz_lon" placeholder="e.g., 67.0011" /></label><br />
         </div>
-      
-        
+
+
         <div class="form-group">
           <label>Website (Optional)</label>
           <input id="biz_site" type="url" placeholder="https://yourwebsite.com" />
@@ -482,24 +491,25 @@
       <!-- Login Form -->
       <div id="loginContent" class="tab-content">
         <h3 style="margin-bottom: 20px; text-align: center; color: #333;">Business Owner Login</h3>
-        
+
         <div class="form-group">
           <label>Business Email</label>
           <input id="login_email" type="email" placeholder="Your registered business email" />
         </div>
-        
+
         <div class="form-group">
           <label>Phone Number</label>
           <input id="login_phone" type="tel" placeholder="Your registered phone number" />
         </div>
-        
+
         <div class="button-group">
           <button id="loginBtn">Access Dashboard</button>
           <button id="forgotBtn" class="btn-secondary">Forgot Details?</button>
         </div>
-        
+
         <div style="text-align: center; margin-top: 15px; color: #666; font-size: 14px;">
-          Don't have an account? <a href="#" onclick="switchToSignup()" style="color: #00bb55; text-decoration: none;">Register here</a>
+          Don't have an account? <a href="#" onclick="switchToSignup()"
+            style="color: #00bb55; text-decoration: none;">Register here</a>
         </div>
       </div>
 
@@ -519,7 +529,7 @@
     const menu = document.getElementById("menu");
     const menuBtn = document.getElementById("menuBtn");
     let menuOpen = false;
-    
+
     menuBtn.onclick = () => {
       menuOpen = !menuOpen;
       menu.style.display = menuOpen ? "block" : "none";
@@ -560,7 +570,7 @@
       msgDiv.textContent = text;
       msgDiv.className = type;
       msgDiv.style.display = 'block';
-      
+
       if (type === 'success') {
         setTimeout(() => {
           msgDiv.style.display = 'none';
@@ -569,13 +579,21 @@
     }
 
     // Robust click tracker
-    function handleBusinessClick(businessId, clickType, url, query = "") {
+
+    // Track clicks and open URLs directly (no redirect endpoint needed)
+    function handleBusinessClick(event, businessId, clickType, originalUrl, query = "") {
+      // Prevent default link behavior
+      event.preventDefault();
+
       if (!businessId) {
-        console.warn("handleBusinessClick called without businessId", { url, clickType, query });
-        if (url) window.open(url, "_blank", "noopener");
+        console.warn("No businessId provided, opening URL directly");
+        if (originalUrl) window.open(originalUrl, "_blank", "noopener,noreferrer");
         return;
       }
 
+      console.log("Tracking click:", { businessId, clickType, originalUrl });
+
+      // Track the click via API
       fetch(`${API_BASE}/track_click`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -586,17 +604,17 @@
         })
       })
         .then(async (res) => {
-          const body = await res.text().catch(() => "");
           if (!res.ok) {
-            console.error("track_click failed", res.status, body);
+            console.error("track_click failed", res.status, await res.text().catch(() => ""));
           } else {
-            console.log("track_click success", businessId, clickType);
+            console.log("✓ Click tracked successfully");
           }
         })
         .catch((err) => console.error("track_click error", err));
 
-      if (url) {
-        window.open(url, "_blank", "noopener");
+      // Open the URL immediately (don't wait for tracking)
+      if (originalUrl) {
+        window.open(originalUrl, "_blank", "noopener,noreferrer");
       }
     }
 
@@ -605,11 +623,18 @@
     const promptInput = document.getElementById("prompt");
     const sendBtn = document.getElementById("sendBtn");
 
+
+    // Store the last search query for tracking context
+    let lastSearchQuery = "";
+
+    // ADD THIS TO YOUR EXISTING CODE - Update addMessage function to handle HTML
     function addMessage(text, who = "bot") {
       const d = document.createElement("div");
       d.className = "msg " + (who === "user" ? "user" : "bot");
       if (who === "bot") {
+        // Use marked to parse markdown, but keep HTML intact
         d.innerHTML = marked.parse(text);
+        // NOW intercept and add tracking to links
         interceptLinks(d);
       } else {
         d.textContent = text;
@@ -618,27 +643,45 @@
       chat.scrollTop = chat.scrollHeight;
     }
 
+
+
+    // Intercept links and add click tracking
     function interceptLinks(container) {
       const links = container.querySelectorAll("a");
+
       links.forEach((link) => {
         try {
-          const realUrl = link.getAttribute("href") || link.href || "";
-          if (!realUrl) return;
+          const href = link.getAttribute("href") || "";
+          if (!href) return;
 
-          const bizId = link.dataset.bizId || link.dataset.businessId || 
-                       link.getAttribute("data-biz-id") || link.getAttribute("data-business-id");
+          // Get business ID from data attributes
+          const bizId = link.dataset.bizId || link.dataset.businessId ||
+            link.getAttribute("data-biz-id") || link.getAttribute("data-business-id");
 
-          link.dataset.originalUrl = realUrl;
+          // Only track links that have a business ID
+          if (bizId) {
+            // Determine click type based on URL
+            let clickType = "website";
+            if (href.startsWith("mailto:")) {
+              clickType = "email";
+            } else if (href.startsWith("tel:")) {
+              clickType = "phone";
+            }
 
-          const encodedUrl = encodeURIComponent(realUrl);
-          const sess = encodeURIComponent(sessionId);
-          let redirectUrl = `${API_BASE.replace(/\/$/, "")}/redirect?session_id=${sess}&url=${encodedUrl}`;
-          if (bizId) redirectUrl += `&business_id=${encodeURIComponent(bizId)}`;
+            // Get the current search query if available
+            const query = window.lastSearchQuery || "";
 
-          link.setAttribute("href", redirectUrl);
-          link.setAttribute("target", "_blank");
-          link.dataset.trackClick = "1";
-          if (bizId) link.dataset.bizId = bizId;
+            // Add click event listener
+            link.addEventListener("click", function (event) {
+              handleBusinessClick(event, bizId, clickType, href, query);
+            });
+
+            // Keep the original href visible and functional
+            link.setAttribute("target", "_blank");
+            link.setAttribute("rel", "noopener noreferrer");
+
+            console.log(`✓ Tracking enabled for ${clickType}:`, href);
+          }
         } catch (e) {
           console.error("interceptLinks error", e);
         }
@@ -652,11 +695,15 @@
       localStorage.setItem("session_id", sessionId);
     }
 
-    // Send message functionality
+    // UPDATE YOUR sendBtn.onclick TO STORE THE QUERY:
     sendBtn.onclick = async () => {
       const text = promptInput.value.trim();
       if (!text) return;
-      
+
+      // Store query for tracking
+      window.lastSearchQuery = text;
+      lastSearchQuery = text;
+
       addMessage(text, "user");
       promptInput.value = "";
       addMessage("Thinking...", "bot");
@@ -838,7 +885,7 @@
                 localStorage.setItem("business_id", j.business_id);
                 localStorage.setItem("business_email", payload.email);
                 localStorage.removeItem("pending_business_id");
-                
+
                 showMessage("Payment successful! Your business is active for 30 days. Redirecting...", "success");
                 setTimeout(() => {
                   window.location.href = `dashboard.html?business_id=${j.business_id}`;
