@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelperAI - User Guide & Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            background: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Content Sections */
+        .section {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Feature Cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border-left: 5px solid #667eea;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        /* Step Cards */
+        .step-container {
+            margin: 30px 0;
+        }
+
+        .step {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #764ba2;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: #e9ecef;
+            transform: translateX(10px);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        /* FAQ Section */
+        .faq-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: #e9ecef;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+            color: #555;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        .faq-item.open .faq-question::after {
+            content: "−";
+        }
+
+        .faq-question::after {
+            content: "+";
+            font-size: 1.5em;
+            color: #764ba2;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: #e7f3ff;
+            border-left: 5px solid #2196F3;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .example-box strong {
+            color: #2196F3;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        /* Buttons */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 20px 10px 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Lists */
+        ul,
+        ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            margin-top: 50px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🤖 HelperAI</h1>
+            <p>Your Smart Business Discovery & Recommendation Platform</p>
+        </header>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-btn active" onclick="showSection('overview')">Overview</button>
+            <button class="nav-btn" onclick="showSection('users')">For Users</button>
+            <button class="nav-btn" onclick="showSection('businesses')">For Businesses</button>
+            <button class="nav-btn" onclick="showSection('analytics')">Analytics</button>
+            <button class="nav-btn" onclick="showSection('faq')">FAQ</button>
+        </div>
+
+        <!-- Overview Section -->
+        <div id="overview" class="section active">
+            <h2>📖 Platform Overview</h2>
+
+            <div class="alert alert-info">
+                <strong>🎯 What is HelperAI?</strong><br>
+                HelperAI is an intelligent platform that connects users with local and global businesses through
+                AI-powered recommendations. Users can search for services naturally, and businesses get powerful
+                analytics to track their reach and engagement.
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔍 Smart Search</h4>
+                    <p>Find businesses using natural language. Just ask what you need!</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📍 Location-Aware</h4>
+                    <p>Automatically finds nearby businesses based on your location.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Business Analytics</h4>
+                    <p>Track impressions, clicks, and user engagement in real-time.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌐 Local & Global</h4>
+                    <p>Support for both location-based and online businesses.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💳 Subscription Model</h4>
+                    <p>₹2000/month for businesses with 30-day active listings.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📱 Click Tracking</h4>
+                    <p>Track website visits, phone calls, and email clicks.</p>
+                </div>
+            </div>
+
+            <h3>🚀 Key Features</h3>
+            <ul>
+                <li><strong>AI-Powered Recommendations:</strong> Get personalized business suggestions based on your
+                    query</li>
+                <li><strong>Geolocation Support:</strong> Automatically find businesses within 5km radius</li>
+                <li><strong>Real-Time Analytics:</strong> Business owners see impressions, clicks, and engagement
+                    metrics</li>
+                <li><strong>Smart Click Tracking:</strong> Track user interactions with website, phone, and email</li>
+                <li><strong>Session Management:</strong> Maintains conversation context for better recommendations</li>
+                <li><strong>PWA Support:</strong> Install as a mobile app for quick access</li>
+            </ul>
+
+            <a href="index.html" class="cta-button">Start Searching</a>
+            <a href="index.html#businessBtn" class="cta-button">List Your Business</a>
+        </div>
+
+        <!-- Users Section -->
+        <div id="users" class="section">
+            <h2>👥 User Guide</h2>
+
+            <h3>🔍 How to Search for Services</h3>
+
+            <div class="step-container">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>Visit the Homepage</strong>
+                    <p>Go to the HelperAI chat interface where you'll see a search box.</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>Enable Location (Optional)</strong>
+                    <p>Allow location access for local business recommendations near you.</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>Ask Naturally</strong>
+                    <p>Type your question in plain English. No need for exact keywords!</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>Get Recommendations</strong>
+                    <p>Receive AI-powered suggestions with contact details and distance.</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <strong>Click to Connect</strong>
+                    <p>Click on website, phone, or email links to connect directly.</p>
+                </div>
+            </div>
+
+            <h3>💬 Search Examples</h3>
+
+            <div class="example-box">
+                <strong>For Local Services:</strong>
+                <ul>
+                    <li>"I need a plumber near me"</li>
+                    <li>"Find electricians in my area"</li>
+                    <li>"Best restaurants nearby"</li>
+                    <li>"Local dentist close to me"</li>
+                    <li>"Gyms around here"</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>For Global Services:</strong>
+                <ul>
+                    <li>"Web development services"</li>
+                    <li>"Digital marketing agencies"</li>
+                    <li>"Online tutoring for math"</li>
+                    <li>"Graphic design services"</li>
+                    <li>"Cloud hosting providers"</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <strong>For Specific Needs:</strong>
+                <ul>
+                    <li>"Emergency AC repair service"</li>
+                    <li>"Affordable yoga classes"</li>
+                    <li>"24/7 pet clinic"</li>
+                    <li>"Organic vegetable delivery"</li>
+                    <li>"Mobile phone repair shop"</li>
+                </ul>
+            </div>
+
+            <h3>✨ Pro Tips for Better Results</h3>
+            <ul>
+                <li><strong>Be Specific:</strong> Include details like "emergency", "affordable", "certified", etc.</li>
+                <li><strong>Use Location Keywords:</strong> "near me", "nearby", "in my area" for local searches</li>
+                <li><strong>Ask Follow-up Questions:</strong> The AI remembers your conversation context</li>
+                <li><strong>Enable Location:</strong> Get accurate distance calculations and better local results</li>
+                <li><strong>Click Tracked Links:</strong> All website/phone/email clicks help businesses track their
+                    reach</li>
+            </ul>
+
+            <div class="alert alert-success">
+                <strong>✅ Privacy Note:</strong> Your location is only used for finding nearby businesses and is not
+                stored permanently. Each search creates an anonymous session.
+            </div>
+        </div>
+
+        <!-- Businesses Section -->
+        <div id="businesses" class="section">
+            <h2>🏢 Business Owner Guide</h2>
+
+            <h3>📝 How to List Your Business</h3>
+
+            <div class="step-container">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>Click "List Your Business"</strong>
+                    <p>Navigate to the homepage and click the business registration button.</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>Fill Business Details</strong>
+                    <p>Provide accurate information about your business (see guidelines below).</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>Choose Business Type</strong>
+                    <p>Select "Local" for physical businesses or "Global" for online services.</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>Complete Payment</strong>
+                    <p>Pay ₹2000 subscription fee via Razorpay (secure payment gateway).</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <strong>Access Dashboard</strong>
+                    <p>Login to view your analytics and track business performance.</p>
+                </div>
+            </div>
+
+            <h3>📋 Required Business Information</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Business Name</strong></td>
+                        <td>✅ Yes</td>
+                        <td>Your official business name</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td>✅ Yes</td>
+                        <td>Contact email for customers and login</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone</strong></td>
+                        <td>✅ Yes</td>
+                        <td>Contact number (used for login verification)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Business Type</strong></td>
+                        <td>✅ Yes</td>
+                        <td>Local (physical location) or Global (online)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Categories</strong></td>
+                        <td>✅ Yes</td>
+                        <td>Business categories (see guidelines below)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Services</strong></td>
+                        <td>✅ Yes</td>
+                        <td>Detailed service description (very important!)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address</strong></td>
+                        <td>For Local</td>
+                        <td>Physical address (required for local businesses)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Location (GPS)</strong></td>
+                        <td>For Local</td>
+                        <td>Latitude/Longitude for accurate distance</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Website</strong></td>
+                        <td>Optional</td>
+                        <td>Your business website URL</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🎯 Choosing: Local vs Global</h3>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📍 Local Business</h4>
+                    <p><strong>Choose if:</strong></p>
+                    <ul>
+                        <li>You have a physical location</li>
+                        <li>Customers visit your shop/office</li>
+                        <li>You serve a specific geographic area</li>
+                    </ul>
+                    <p><strong>Examples:</strong> Restaurants, Salons, Clinics, Repair Shops, Gyms</p>
+                    <p><strong>Benefits:</strong> Appear in "near me" searches, distance shown to users</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>🌐 Global Business</h4>
+                    <p><strong>Choose if:</strong></p>
+                    <ul>
+                        <li>You provide online services</li>
+                        <li>Location doesn't matter</li>
+                        <li>You serve customers worldwide</li>
+                    </ul>
+                    <p><strong>Examples:</strong> Web Development, Digital Marketing, Online Tutoring, SaaS</p>
+                    <p><strong>Benefits:</strong> Appear in all relevant searches regardless of location</p>
+                </div>
+            </div>
+
+            <h3>🏷️ Categories: How to Choose</h3>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Important:</strong> Categories help the AI match your business to user queries. Choose ALL
+                relevant categories, separated by commas.
+            </div>
+
+            <h4>Popular Category Examples:</h4>
+
+            <div class="code-block">
+                <strong>Home Services:</strong>
+                plumbing, electrical, HVAC, carpentry, painting, cleaning, pest control
+
+                <strong>Health & Wellness:</strong>
+                dental, medical, clinic, hospital, pharmacy, physiotherapy, yoga, gym, fitness
+
+                <strong>Food & Dining:</strong>
+                restaurant, cafe, bakery, catering, food delivery, fast food, fine dining
+
+                <strong>Automotive:</strong>
+                car repair, bike service, tire shop, car wash, auto parts, mechanic
+
+                <strong>Professional Services:</strong>
+                legal, accounting, consulting, real estate, insurance, financial planning
+
+                <strong>Beauty & Personal Care:</strong>
+                salon, spa, barber, beauty parlor, massage, skincare, nail care
+
+                <strong>Technology:</strong>
+                web development, app development, IT support, software, digital marketing, SEO
+
+                <strong>Education:</strong>
+                tutoring, coaching, training, online courses, language classes, test prep
+
+                <strong>Retail:</strong>
+                clothing, electronics, furniture, books, jewelry, gifts, groceries
+            </div>
+
+            <div class="example-box">
+                <strong>✅ Good Category Examples:</strong>
+                <ul>
+                    <li><code>plumbing, emergency plumbing, drain cleaning, pipe repair</code></li>
+                    <li><code>dental clinic, dentist, teeth whitening, orthodontics, root canal</code></li>
+                    <li><code>web development, mobile apps, e-commerce, custom software</code></li>
+                    <li><code>restaurant, Indian cuisine, vegetarian food, home delivery</code></li>
+                </ul>
+            </div>
+
+            <h3>📝 Services Description: Best Practices</h3>
+
+            <div class="alert alert-info">
+                <strong>💡 Why It Matters:</strong> The services description is THE MOST IMPORTANT field! The AI uses
+                this to match your business with user queries. Be detailed and specific!
+            </div>
+
+            <h4>✅ DO:</h4>
+            <ul>
+                <li><strong>Be Detailed:</strong> Describe all services you offer comprehensively</li>
+                <li><strong>Use Keywords:</strong> Include terms customers might search for</li>
+                <li><strong>Mention Specialties:</strong> Highlight what makes you unique</li>
+                <li><strong>Include Problems You Solve:</strong> "Emergency repairs", "24/7 service", etc.</li>
+                <li><strong>Add Service Areas:</strong> Mention neighborhoods, cities you serve</li>
+                <li><strong>Use Natural Language:</strong> Write like you're talking to a customer</li>
+            </ul>
+
+            <h4>❌ DON'T:</h4>
+            <ul>
+                <li>Write generic descriptions like "We provide good service"</li>
+                <li>Use only one or two words</li>
+                <li>Forget to mention specific services</li>
+                <li>Leave out important details about what you do</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>❌ Bad Service Description:</strong>
+                <p style="color: #dc3545;">"We are a plumbing company. We do good work."</p>
+
+                <strong>✅ Good Service Description:</strong>
+                <p style="color: #28a745;">"Professional plumbing services including emergency repairs, drain cleaning,
+                    water heater installation, pipe repairs, bathroom renovations, and leak detection. We offer 24/7
+                    emergency service for burst pipes and urgent repairs. Serving residential and commercial properties
+                    in Mysuru and surrounding areas. Licensed and insured plumbers with 15+ years experience. Same-day
+                    service available for most repairs."</p>
+            </div>
+
+            <h3>💰 Pricing & Subscription</h3>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>💳 Subscription Fee</h4>
+                    <p><strong>₹2000 / month</strong></p>
+                    <p>One-time payment for 30 days of active listing</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>📊 What You Get</h4>
+                    <ul>
+                        <li>Active business listing for 30 days</li>
+                        <li>Appear in AI recommendations</li>
+                        <li>Analytics dashboard access</li>
+                        <li>Impression & click tracking</li>
+                        <li>Direct customer connections</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h4>🔄 Auto-Renewal</h4>
+                    <p>Your listing expires after 30 days. You'll need to renew by logging into your dashboard and
+                        making a new payment.</p>
+                </div>
+            </div>
+
+            <h3>🔑 Dashboard Access</h3>
+
+            <p>After registration, you can login to your business dashboard using:</p>
+            <ul>
+                <li><strong>Email:</strong> The email you registered with</li>
+                <li><strong>Phone:</strong> Your registered phone number</li>
+            </ul>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Keep These Safe:</strong> Your email and phone are your login credentials. Keep them secure!
+            </div>
+
+            <a href="index.html#businessBtn" class="cta-button">Register Your Business</a>
+        </div>
+
+        <!-- Analytics Section -->
+        <div id="analytics" class="section">
+            <h2>📊 Analytics Dashboard Guide</h2>
+
+            <h3>🔐 Accessing Your Dashboard</h3>
+
+            <div class="step-container">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>Click "Business Login"</strong>
+                    <p>On the homepage, click the business section and choose "Already registered? Login"</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>Enter Credentials</strong>
+                    <p>Provide your registered email and phone number</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>View Analytics</strong>
+                    <p>Access your comprehensive business analytics dashboard</p>
+                </div>
+            </div>
+
+            <h3>📈 Available Metrics</h3>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>👀 Impressions</h4>
+                    <p><strong>What it means:</strong> Number of times your business was shown to users in search
+                        results</p>
+                    <p><strong>Tracked:</strong> Total impressions & monthly impressions</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>🖱️ Clicks</h4>
+                    <p><strong>What it means:</strong> Number of times users clicked your website, phone, or email</p>
+                    <p><strong>Types:</strong> Website clicks, Phone clicks, Email clicks</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>📊 Click-Through Rate (CTR)</h4>
+                    <p><strong>What it means:</strong> Percentage of impressions that resulted in clicks</p>
+                    <p><strong>Formula:</strong> (Total Clicks / Total Impressions) × 100</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>📍 Average Distance</h4>
+                    <p><strong>What it means:</strong> Average distance of users who saw your business (for local
+                        businesses)</p>
+                    <p><strong>Use:</strong> Understand your service area reach</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>📅 Active Days</h4>
+                    <p><strong>What it means:</strong> Number of days your business received impressions</p>
+                    <p><strong>Use:</strong> Measure consistency of visibility</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4>🔍 Top Queries</h4>
+                    <p><strong>What it means:</strong> Most common search terms that led to your business</p>
+                    <p><strong>Use:</strong> Optimize your service description</p>
+                </div>
+            </div>
+
+            <h3>💡 Understanding Your Analytics</h3>
+
+            <h4>What is an Impression?</h4>
+            <p>An impression is counted when:</p>
+            <ul>
+                <li>Your business appears in AI-generated recommendations</li>
+                <li>A user's search query matches your categories or services</li>
+                <li>Your business details are shown to the user</li>
+            </ul>
+
+            <h4>What is a Click?</h4>
+            <p>A click is counted when a user:</p>
+            <ul>
+                <li><strong>Website Click:</strong> Clicks your website link</li>
+                <li><strong>Phone Click:</strong> Clicks your phone number (opens dialer)</li <li><strong>Email
+                    Click:</strong> Clicks your email address (opens mail client)</li>
+                     
+            </ul>
+                  <div class="alert alert-success">
+                        <strong>🎉 Good News:</strong> Our updated client-side tracking ensures your clicks are
+                accurately logged immediately without any server redirect delay!
+                      </div>
+
+                  <h4>Actionable Insights: Improving Performance</h4>
+
+                  <ul>
+                        <li><strong>Low Impressions:</strong>
+                              <p><strong>Action:</strong> Broaden your **Categories** and use more keywords in your
+                        **Services** description. Ensure your business is listed as "Global" if you serve a wide area.
+                    </p>
+                            </li>
+                        <li><strong>High Impressions, Low CTR (Click-Through Rate):</strong>
+                              <p><strong>Action:</strong> Your business is being seen, but not clicked. Improve your
+                        **Business Name** and the first few lines of your **Services** description so they are more
+                        compelling and relevant to the Top Queries.</p>
+                            </li>
+                        <li><strong>Top Queries Mismatch:</strong>
+                              <p><strong>Action:</strong> If users are finding you for irrelevant terms, refine your
+                        **Services** description to be more specific. If they are relevant, make sure those services are
+                        prominent!</p>
+                            </li>
+                      </ul>
+
+                  <a href="dashboard.html" class="cta-button">Go to Dashboard</a>
+               
+        </div>
+
+                <div id="faq" class="section">
+                  <h2>❓ Frequently Asked Questions</h2>
+
+                  <div class="faq-item" onclick="toggleFaq(this)">
+                        <div class="faq-question">
+                              How does the AI know my location?
+                            </div>
+                        <div class="faq-answer">
+                              The platform uses the browser's Geolocation API (<code>navigator.geolocation</code>) to
+                    get your approximate latitude and longitude. This information is **temporarily used** to calculate
+                    the distance to local businesses using the Haversine formula and is **not permanently stored**.
+                            </div>
+                      </div>
+
+                  <div class="faq-item" onclick="toggleFaq(this)">
+                        <div class="faq-question">
+                              Is the ₹2000 fee monthly or a one-time charge?
+                            </div>
+                        <div class="faq-answer">
+                              The fee is for **30 days of active listing**. It is a **recurring monthly fee** if you
+                    choose to renew your listing every 30 days to maintain visibility and dashboard access.
+                            </div>
+                      </div>
+
+                  <div class="faq-item" onclick="toggleFaq(this)">
+                        <div class="faq-question">
+                              What kind of AI model is running the recommendations?
+                            </div>
+                        <div class="faq-answer">
+                              We utilize an advanced **Large Language Model (LLM)** with **tool-calling capabilities**
+                    (like Groq) which processes the user's natural language query and uses the nearest business data
+                    (from DynamoDB) to formulate the most relevant, human-like recommendation.
+                            </div>
+                      </div>
+
+                  <div class="faq-item" onclick="toggleFaq(this)">
+                        <div class="faq-question">
+                              How does the new click tracking work?
+                            </div>
+                        <div class="faq-answer">
+                              We implemented **client-side event tracking**. When you click a business link, a
+                    JavaScript function (`handleBusinessClick`) intercepts the click, sends a quick, non-blocking
+                    <code>/track_click</code> API request in the background, and immediately redirects you to the
+                    website/phone/email destination. This ensures accurate tracking with zero user delay.
+                            </div>
+                      </div>
+
+                  <div class="faq-item" onclick="toggleFaq(this)">
+                        <div class="faq-question">
+                              If I list as 'Global', will I still show up in 'near me' searches?
+                            </div>
+                        <div class="faq-answer">
+                              **No.** If you are listed as **Global**, the system ignores location data and prioritizes
+                    matching your services and categories. Only businesses listed as **Local** (with accurate GPS
+                    coordinates) are included in the proximity search criteria.
+                            </div>
+                      </div>
+
+                </div>
+
+         
+    </div>
+
+        <footer>
+            <p>&copy; 2025 HelperAI. All rights reserved. | Smart Business Discovery.</p>
+          </footer>
+
+       
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Deactivate all buttons
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show the selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Activate the corresponding button
+            const activeBtn = document.querySelector(`.nav-btn[onclick*="${sectionId}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+        }
+
+        function toggleFaq(item) {
+            item.classList.toggle('open');
+        }
+
+        // Initialize the page by showing the 'overview' section
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ensure only the overview is visible on load
+            showSection('overview');
+
+            // Optionally check for deep links (e.g., helperai.com/guide#businesses)
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash)) {
+                showSection(hash);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
