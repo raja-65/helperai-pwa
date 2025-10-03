@@ -1,176 +1,339 @@
 <!doctype html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Business Login - HelperAI</title>
+    <title>Business Portal - HelperAI</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0b5">
+    <meta name="theme-color" content="#00bb55">
     <link rel="stylesheet" href="style.css">
     <style>
-        .login-container {
-            max-width: 400px;
-            margin: 50px auto;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
             padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
         }
-        .login-form input {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .login-form button {
-            background: #0b5;
+
+        .header {
+            background: linear-gradient(135deg, #00bb55 0%, #00aa44 100%);
             color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .login-form button:hover {
-            background: #094;
-        }
-        .login-form button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        .error-msg {
-            background: #fee;
-            color: #d63031;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .success-msg {
-            background: #e8f5e8;
-            color: #2e7d2e;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .forgot-link {
+            padding: 30px;
             text-align: center;
-            margin-top: 15px;
         }
-        .forgot-link a {
-            color: #0b5;
-            text-decoration: none;
-            font-size: 14px;
+
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
         }
-        .back-link {
-            text-align: center;
-            margin-top: 20px;
+
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
         }
-        .back-link a {
-            color: #666;
-            text-decoration: none;
-        }
-        .tabs {
+
+        .modal-tabs {
             display: flex;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .modal-tab {
+            flex: 1;
+            padding: 15px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+
+        .modal-tab:hover {
+            color: #00bb55;
+        }
+
+        .modal-tab.active {
+            color: #00bb55;
+            border-bottom-color: #00bb55;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
             margin-bottom: 20px;
         }
-        .tab {
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00bb55;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
             flex: 1;
-            padding: 10px;
-            text-align: center;
-            background: #f8f9fa;
-            border: 1px solid #ddd;
+            padding: 14px;
+            background: linear-gradient(135deg, #00bb55 0%, #00aa44 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
         }
-        .tab.active {
-            background: #0b5;
-            color: white;
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 187, 85, 0.3);
         }
-        .tab-content {
-            display: none;
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
-        .tab-content.active {
-            display: block;
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+            box-shadow: none;
+        }
+
+        #bizMsg {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        #bizMsg.error {
+            background: #fee;
+            color: #d63031;
+            border-left: 4px solid #d63031;
+        }
+
+        #bizMsg.success {
+            background: #e8f5e8;
+            color: #2e7d2e;
+            border-left: 4px solid #2e7d2e;
+        }
+
+        #bizMsg.info {
+            background: #e7f3ff;
+            color: #2196F3;
+            border-left: 4px solid #2196F3;
+        }
+
+        .back-link {
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .back-link a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link a:hover {
+            color: #00bb55;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px auto;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .tab-content {
+                padding: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 
 <body>
-    <header>
-        <div style="display:flex;align-items:center;gap:12px">
-            <img src="logo.png" alt="HelperAI Logo" class="logo" />
-            <strong>HelperAI - Business Portal</strong>
-        </div>
-    </header>
-
-    <div class="login-container">
-        <!-- Tabs for Login/Signup -->
-        <div class="tabs">
-            <div class="tab active" onclick="showTab('login')">Login</div>
-            <div class="tab" onclick="showTab('signup')">New Business</div>
+    <div class="container">
+        <div class="header">
+            <h1>HelperAI</h1>
+            <p>Business Portal</p>
         </div>
 
-        <!-- Login Form -->
-        <div id="login-tab" class="tab-content active">
-            <h2>Business Owner Login</h2>
-            <form class="login-form" id="loginForm">
-                <input type="email" id="login_email" placeholder="Business Email" required>
-                <input type="tel" id="login_phone" placeholder="Registered Phone Number" required>
-                <button type="submit" id="loginBtn">Access Dashboard</button>
-            </form>
-            <div class="forgot-link">
-                <a href="#" onclick="showForgotPassword()">Can't access your account?</a>
-            </div>
+        <div class="modal-tabs">
+            <button class="modal-tab active" id="signupTab">New Business</button>
+            <button class="modal-tab" id="loginTab">Already Have Account</button>
         </div>
 
         <!-- Signup Form -->
-        <div id="signup-tab" class="tab-content">
-            <h2>Register New Business</h2>
-            <form class="login-form" id="signupForm">
-                <input type="text" id="signup_name" placeholder="Business Name" required>
-                <input type="email" id="signup_email" placeholder="Business Email" required>
-                <input type="tel" id="signup_phone" placeholder="Phone Number" required>
-                <select id="signup_type">
+        <div id="signupContent" class="tab-content active">
+            <div class="form-group">
+                <label>Business Name</label>
+                <input id="biz_name" placeholder="Your business name" />
+            </div>
+
+            <div class="form-group">
+                <label>Business Email</label>
+                <input id="biz_email" type="email" placeholder="owner@business.com" />
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input id="biz_phone" type="tel" placeholder="10-digit phone number" />
+            </div>
+
+            <div class="form-group">
+                <label for="biz_type">Business Type</label>
+                <select id="biz_type" name="biz_type" title="Select your business type">
                     <option value="local">Local Business</option>
                     <option value="global">Global Business</option>
                 </select>
-                <input type="text" id="signup_categories" placeholder="Categories (e.g., food, services)">
-                <textarea id="signup_services" placeholder="Describe your services..." rows="3" required></textarea>
-                <input type="text" id="signup_address" placeholder="Business Address">
-                <input type="text" id="signup_website" placeholder="Website (optional)">
-                
-                <div style="display: flex; gap: 10px;">
-                    <button type="button" id="useLocationBtn">📍 Use My Location</button>
-                    <button type="submit" id="signupBtn">Register & Pay ₹2000</button>
-                </div>
-                <input type="hidden" id="signup_lat">
-                <input type="hidden" id="signup_lon">
-            </form>
+            </div>
+
+
+            <div class="form-group">
+                <label>Categories</label>
+                <input id="biz_cat" placeholder="e.g., food, services, retail" />
+            </div>
+
+            <div class="form-group">
+                <label>Services Offered</label>
+                <textarea id="biz_services" rows="3"
+                    placeholder="Describe your services, products, or what you offer customers..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Business Address (Optional)</label>
+                <input id="biz_addr" placeholder="Street address or landmark" />
+            </div>
+
+            <div class="form-group">
+                <label>Website (Optional)</label>
+                <input id="biz_site" type="url" placeholder="https://yourwebsite.com" />
+            </div>
+
+
+            <div class="form-group">
+                <label>Latitude (Optional)</label>
+                <input id="biz_lat" placeholder="e.g., 12.9716" />
+            </div>
+
+            <div class="form-group">
+                <label>Longitude (Optional)</label>
+                <input id="biz_lon" placeholder="e.g., 77.5946" />
+            </div>
+
+            <div class="button-group">
+                <button id="useLocationBtn" class="btn-secondary">📍 Use My Location</button>
+                <button id="bizCreate">Register & Pay ₹2000</button>
+            </div>
+
         </div>
 
-        <div id="message" style="margin-top: 15px; display: none;"></div>
+        <!-- Login Form -->
+        <div id="loginContent" class="tab-content">
+            <div class="form-group">
+                <label>Business Email</label>
+                <input id="login_email" type="email" placeholder="Your registered business email" />
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input id="login_phone" type="tel" placeholder="Your registered phone number" />
+            </div>
+
+            <div class="button-group">
+                <button id="loginBtn">Access Dashboard</button>
+            </div>
+
+            <div style="text-align: center; margin-top: 15px; color: #666; font-size: 14px;">
+                Don't have an account? <a href="#" onclick="switchToSignup(); return false;"
+                    style="color: #00bb55; text-decoration: none;">Register here</a>
+            </div>
+        </div>
+
+        <div id="bizMsg" style="display: none;"></div>
 
         <div class="back-link">
             <a href="index.html">← Back to Main Site</a>
-        </div>
-    </div>
-
-    <!-- Forgot Password Modal -->
-    <div id="forgotModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;">
-        <div style="background:#fff;max-width:400px;margin:100px auto;padding:20px;border-radius:8px;">
-            <h3>Account Recovery</h3>
-            <p>Enter your business email to receive access instructions:</p>
-            <input type="email" id="recovery_email" placeholder="Business Email" style="width:100%;padding:10px;margin:10px 0;border:1px solid #ddd;border-radius:4px;">
-            <div style="display:flex;gap:10px;margin-top:15px;">
-                <button onclick="sendRecoveryEmail()" style="flex:1;padding:10px;background:#0b5;color:white;border:none;border-radius:4px;">Send Instructions</button>
-                <button onclick="closeForgotModal()" style="flex:1;padding:10px;background:#ccc;border:none;border-radius:4px;">Cancel</button>
-            </div>
-            <div id="recoveryMsg" style="margin-top:10px;font-size:13px;"></div>
         </div>
     </div>
 
@@ -178,234 +341,13 @@
     <script>
         const API_BASE = "https://qoa89j5onh.execute-api.us-east-1.amazonaws.com/prod";
 
-        // Tab switching
-        function showTab(tabName) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Remove active class from all tabs
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show selected tab content and mark tab as active
-            document.getElementById(tabName + '-tab').classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        // Login Form Handler
-        document.getElementById('loginForm').onsubmit = async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('login_email').value.trim();
-            const phone = document.getElementById('login_phone').value.trim();
-            
-            if (!email || !phone) {
-                showMessage('Please enter both email and phone number', 'error');
-                return;
-            }
-
-            const loginBtn = document.getElementById('loginBtn');
-            loginBtn.disabled = true;
-            loginBtn.textContent = 'Checking...';
-
-            try {
-                const response = await fetch(`${API_BASE}/business/login`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({email, phone})
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.business_id) {
-                    // store business id + session token
-                    localStorage.setItem('session_token', data.session_token);
-                    localStorage.setItem('business_id', data.business_id);
-
-                    showMessage('Login successful. Redirecting to dashboard...', 'success');
-                    setTimeout(() => {
-                        window.location.href = `dashboard.html?business_id=${encodeURIComponent(data.business_id)}`;
-                    }, 700);
-                } else {
-                    showMessage(data.error || 'Login failed', 'error');
-                }
-            } catch (error) {
-                showMessage('Connection error. Please try again.', 'error');
-            } finally {
-                loginBtn.disabled = false;
-                loginBtn.textContent = 'Access Dashboard';
-            }
-        };
-
-        // Signup Form Handler
-        document.getElementById('signupForm').onsubmit = async (e) => {
-            e.preventDefault();
-            
-            const payload = {
-                name: document.getElementById('signup_name').value.trim(),
-                email: document.getElementById('signup_email').value.trim(),
-                phone: document.getElementById('signup_phone').value.trim(),
-                type: document.getElementById('signup_type').value,
-                categories: document.getElementById('signup_categories').value.trim(),
-                services: document.getElementById('signup_services').value.trim(),
-                address: document.getElementById('signup_address').value.trim(),
-                website: document.getElementById('signup_website').value.trim(),
-                lat: document.getElementById('signup_lat').value || null,
-                lon: document.getElementById('signup_lon').value || null
-            };
-
-            if (!payload.name || !payload.email || !payload.phone || !payload.services) {
-                showMessage('Please fill in all required fields', 'error');
-                return;
-            }
-
-            const signupBtn = document.getElementById('signupBtn');
-            signupBtn.disabled = true;
-            signupBtn.textContent = 'Creating...';
-
-            try {
-                const response = await fetch(`${API_BASE}/business/signup`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(payload)
-                });
-
-                const data = await response.json();
-
-                if (!response.ok || !data.order_id) {
-                    showMessage(data.error || 'Signup failed', 'error');
-                    return;
-                }
-
-                // Store business ID for later use
-                localStorage.setItem('pending_business_id', data.business_id);
-
-                // Open Razorpay payment
-                const options = {
-                    key: data.razorpay_key,
-                    order_id: data.order_id,
-                    name: payload.name,
-                    description: 'Business subscription ₹2000 / month',
-                    handler: async function(razorResp) {
-                        showMessage('Payment successful! Verifying...', 'success');
-                        
-                        try {
-                            const verify = await fetch(`${API_BASE}/business/verify_payment`, {
-                                method: 'POST',
-                                headers: {'Content-Type': 'application/json'},
-                                body: JSON.stringify({
-                                    razorpay_payment_id: razorResp.razorpay_payment_id,
-                                    business_id: data.business_id
-                                })
-                            });
-
-                            const result = await verify.json();
-                            if (result.ok) {
-                                localStorage.setItem('business_id', data.business_id);
-                                localStorage.setItem('business_email', payload.email);
-                                localStorage.removeItem('pending_business_id');
-                                
-                                showMessage('Business registered successfully! Redirecting to dashboard...', 'success');
-                                setTimeout(() => {
-                                    window.location.href = `dashboard.html?business_id=${data.business_id}`;
-                                }, 2000);
-                            } else {
-                                showMessage('Payment verification failed. Contact support.', 'error');
-                            }
-                        } catch (error) {
-                            showMessage('Payment verification error. Contact support.', 'error');
-                        }
-                    },
-                    prefill: {
-                        name: payload.name,
-                        email: payload.email,
-                        contact: payload.phone
-                    },
-                    theme: { color: "#0b5" }
-                };
-
-                const rzp = new Razorpay(options);
-                rzp.open();
-
-            } catch (error) {
-                showMessage('Connection error. Please try again.', 'error');
-            } finally {
-                signupBtn.disabled = false;
-                signupBtn.textContent = 'Register & Pay ₹2000';
-            }
-        };
-
-        // Location functionality
-        document.getElementById('useLocationBtn').onclick = async () => {
-            const btn = document.getElementById('useLocationBtn');
-            btn.textContent = 'Getting location...';
-            btn.disabled = true;
-
-            try {
-                const position = await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
-                });
-
-                document.getElementById('signup_lat').value = position.coords.latitude;
-                document.getElementById('signup_lon').value = position.coords.longitude;
-                
-                showMessage('Location captured successfully!', 'success');
-                btn.textContent = '✓ Location Added';
-                
-            } catch (error) {
-                showMessage('Could not get location. Please enter address manually.', 'error');
-                btn.textContent = '📍 Use My Location';
-                btn.disabled = false;
-            }
-        };
-
-        // Forgot password functionality
-        function showForgotPassword() {
-            document.getElementById('forgotModal').style.display = 'block';
-        }
-
-        function closeForgotModal() {
-            document.getElementById('forgotModal').style.display = 'none';
-            document.getElementById('recovery_email').value = '';
-            document.getElementById('recoveryMsg').textContent = '';
-        }
-
-        async function sendRecoveryEmail() {
-            const email = document.getElementById('recovery_email').value.trim();
-            if (!email) {
-                document.getElementById('recoveryMsg').innerHTML = '<span style="color:red;">Please enter your email</span>';
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE}/business/recovery`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({email})
-                });
-
-                const data = await response.json();
-                
-                if (response.ok) {
-                    document.getElementById('recoveryMsg').innerHTML = '<span style="color:green;">Recovery instructions sent to your email!</span>';
-                } else {
-                    document.getElementById('recoveryMsg').innerHTML = '<span style="color:red;">' + (data.error || 'Recovery failed') + '</span>';
-                }
-            } catch (error) {
-                document.getElementById('recoveryMsg').innerHTML = '<span style="color:red;">Connection error. Please try again.</span>';
-            }
-        }
-
-        // Utility functions
-        function showMessage(text, type) {
-            const msgDiv = document.getElementById('message');
+        // Message display utility
+        function showMessage(text, type = 'info') {
+            const msgDiv = document.getElementById('bizMsg');
             msgDiv.textContent = text;
-            msgDiv.className = type === 'error' ? 'error-msg' : 'success-msg';
+            msgDiv.className = type;
             msgDiv.style.display = 'block';
-            
+
             if (type === 'success') {
                 setTimeout(() => {
                     msgDiv.style.display = 'none';
@@ -413,45 +355,178 @@
             }
         }
 
-        // Check if user is already logged in
-        window.onload = () => {
-            const businessId = localStorage.getItem('business_id');
-            if (businessId) {
-                // User is already logged in, show option to go to dashboard
-                showMessage('You are already logged in. Click <a href="dashboard.html?business_id=' + businessId + '">here</a> to go to your dashboard.', 'success');
+        // Modal tab switching
+        function switchToLogin() {
+            document.getElementById('signupTab').classList.remove('active');
+            document.getElementById('loginTab').classList.add('active');
+            document.getElementById('signupContent').classList.remove('active');
+            document.getElementById('loginContent').classList.add('active');
+            document.getElementById('bizMsg').style.display = 'none';
+        }
+
+        function switchToSignup() {
+            document.getElementById('loginTab').classList.remove('active');
+            document.getElementById('signupTab').classList.add('active');
+            document.getElementById('loginContent').classList.remove('active');
+            document.getElementById('signupContent').classList.add('active');
+            document.getElementById('bizMsg').style.display = 'none';
+        }
+
+        document.getElementById('signupTab').onclick = switchToSignup;
+        document.getElementById('loginTab').onclick = switchToLogin;
+
+        // Location functionality
+        document.getElementById("useLocationBtn").onclick = async () => {
+            const btn = document.getElementById("useLocationBtn");
+            btn.textContent = "Getting location...";
+            btn.disabled = true;
+
+            try {
+                const pos = await new Promise((res, rej) =>
+                    navigator.geolocation.getCurrentPosition(res, rej, { timeout: 7000 })
+                );
+                document.getElementById("biz_lat").value = pos.coords.latitude;
+                document.getElementById("biz_lon").value = pos.coords.longitude;
+                showMessage("Location captured successfully!", "success");
+                btn.textContent = "✓ Location Added";
+            } catch (e) {
+                showMessage("Could not get location. Enter manually.", "error");
+                btn.textContent = "📍 Use My Location";
+                btn.disabled = false;
             }
         };
 
-        async function onLoginSubmit(email, phone) {
-          try {
-            const resp = await fetch(`${API_BASE}/business/login`, {
-              method: 'POST',
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify({ email, phone })
-            });
+        // Login functionality
+        document.getElementById("loginBtn").onclick = async () => {
+            const email = document.getElementById("login_email").value.trim();
+            const phone = document.getElementById("login_phone").value.trim();
 
-            const data = await resp.json();
-
-            if (!resp.ok) {
-              // show error from backend
-              showError(data.error || 'Login failed');
-              return;
+            if (!email || !phone) {
+                showMessage("Please enter both email and phone number", "error");
+                return;
             }
 
-            // MUST store session_token and business_id BEFORE redirecting
-            if (data.session_token) {
-              localStorage.setItem('session_token', data.session_token);
+            const loginBtn = document.getElementById("loginBtn");
+            loginBtn.disabled = true;
+            loginBtn.textContent = "Checking...";
+
+            try {
+                const response = await fetch(`${API_BASE}/business/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, phone })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.business_id) {
+                    localStorage.setItem("session_token", data.session_token);
+                    localStorage.setItem("business_id", data.business_id);
+
+                    showMessage("Login successful! Redirecting to dashboard...", "success");
+                    setTimeout(() => {
+                        window.location.href = `dashboard.html?business_id=${encodeURIComponent(data.business_id)}`;
+                    }, 1500);
+                } else {
+                    showMessage(data.error || "Login failed", "error");
+                }
+            } catch (error) {
+                showMessage("Connection error. Please try again.", "error");
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = "Access Dashboard";
             }
-            if (data.business_id) {
-              localStorage.setItem('business_id', data.business_id);
+        };
+
+        // Signup functionality
+        document.getElementById("bizCreate").onclick = async () => {
+            const payload = {
+                name: document.getElementById("biz_name").value.trim(),
+                email: document.getElementById("biz_email").value.trim(),
+                phone: document.getElementById("biz_phone").value.trim(),
+                type: document.getElementById("biz_type").value,
+                categories: document.getElementById("biz_cat").value.trim(),
+                services: document.getElementById("biz_services").value.trim(),
+                address: document.getElementById("biz_addr").value.trim(),
+                lat: document.getElementById("biz_lat").value || null,
+                lon: document.getElementById("biz_lon").value || null,
+                website: document.getElementById("biz_site").value.trim() || null,
+            };
+
+            if (!payload.name || !payload.phone || !payload.email) {
+                showMessage("Please enter Name, Phone, and Email.", "error");
+                return;
             }
 
-            // redirect to dashboard (dashboard will read token from localStorage)
-            window.location.href = `dashboard.html?business_id=${encodeURIComponent(data.business_id)}`;
-          } catch (err) {
-            showError('Login error: ' + (err.message || err));
-          }
-        }
+            if (!payload.services) {
+                showMessage("Please describe the services you offer.", "error");
+                return;
+            }
+
+            showMessage("Creating signup...", "info");
+
+            try {
+                const resp = await fetch(API_BASE + "/business/signup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                });
+                const j = await resp.json();
+
+                if (!j || !j.order_id) {
+                    showMessage("Server error creating order: " + (j?.error || "unknown"), "error");
+                    return;
+                }
+
+                localStorage.setItem("pending_business_id", j.business_id);
+
+                const options = {
+                    key: j.razorpay_key,
+                    order_id: j.order_id,
+                    name: payload.name,
+                    description: "Business subscription ₹2000 / month",
+                    handler: async function (razorResp) {
+                        showMessage("Payment successful! Verifying...", "success");
+                        try {
+                            const verify = await fetch(API_BASE + "/business/verify_payment", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    razorpay_payment_id: razorResp.razorpay_payment_id,
+                                    business_id: j.business_id,
+                                }),
+                            });
+                            const v = await verify.json();
+                            if (v && v.ok) {
+                                localStorage.setItem("business_id", j.business_id);
+                                localStorage.setItem("business_email", payload.email);
+                                localStorage.removeItem("pending_business_id");
+
+                                showMessage("Payment successful! Your business is active for 30 days. Redirecting...", "success");
+                                setTimeout(() => {
+                                    window.location.href = `dashboard.html?business_id=${j.business_id}`;
+                                }, 2000);
+                            } else {
+                                showMessage("Payment verification failed. Contact support.", "error");
+                            }
+                        } catch (error) {
+                            showMessage("Payment verification error. Contact support.", "error");
+                        }
+                    },
+                    prefill: {
+                        name: payload.name,
+                        email: payload.email,
+                        contact: payload.phone,
+                    },
+                    theme: { color: "#00bb55" },
+                };
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } catch (e) {
+                showMessage("Network/server error: " + e.message, "error");
+            }
+        };
     </script>
 </body>
+
 </html>

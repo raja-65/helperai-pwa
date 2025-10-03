@@ -433,7 +433,7 @@
                 <li><strong>Real-Time Analytics:</strong> Business owners see impressions, clicks, and engagement
                     metrics</li>
                 <li><strong>Smart Click Tracking:</strong> Track user interactions with website, phone, and email</li>
-                <li><strong>Session Management:</strong> Maintains conversation context for better recommendations</li>
+                <li><strong>Session Management:</strong> Maintains conversation context for better recommendations no storing of history</li>
                 <li><strong>PWA Support:</strong> Install as a mobile app for quick access</li>
             </ul>
 
@@ -463,7 +463,7 @@
                 <div class="step">
                     <span class="step-number">3</span>
                     <strong>Ask Naturally</strong>
-                    <p>Type your question in plain English. No need for exact keywords!</p>
+                    <p>Type your question in plain English. No need for exact keywords!(with exact support)</p>
                 </div>
 
                 <div class="step">
@@ -864,8 +864,8 @@
             <p>A click is counted when a user:</p>
             <ul>
                 <li><strong>Website Click:</strong> Clicks your website link</li>
-                <li><strong>Phone Click:</strong> Clicks your phone number (opens dialer)</li <li><strong>Email
-                    Click:</strong> Clicks your email address (opens mail client)</li>
+                <li><strong>Phone Click:</strong> Clicks your phone number (opens dialer)</li>
+                <li><strong>Email Click:</strong> Clicks your email address (opens mail client)</li>
                      
             </ul>
                   <div class="alert alert-success">
@@ -893,7 +893,7 @@
                             </li>
                       </ul>
 
-                  <a href="dashboard.html" class="cta-button">Go to Dashboard</a>
+                  <a href="businesslogin.html" class="cta-button">Go to Dashboard</a>
                
         </div>
 
@@ -905,9 +905,9 @@
                               How does the AI know my location?
                             </div>
                         <div class="faq-answer">
-                              The platform uses the browser's Geolocation API (<code>navigator.geolocation</code>) to
-                    get your approximate latitude and longitude. This information is **temporarily used** to calculate
-                    the distance to local businesses using the Haversine formula and is **not permanently stored**.
+                               The platform uses the browser's Geolocation API to
+                                get your approximate latitude and longitude. This information is **temporarily used** to calculate
+                                the distance to local businesses using the Haversine formula and is **not permanently stored**.
                             </div>
                       </div>
 
@@ -927,8 +927,8 @@
                             </div>
                         <div class="faq-answer">
                               We utilize an advanced **Large Language Model (LLM)** with **tool-calling capabilities**
-                    (like Groq) which processes the user's natural language query and uses the nearest business data
-                    (from DynamoDB) to formulate the most relevant, human-like recommendation.
+                     which processes the user's natural language query and uses the nearest business data
+                    (from scalable database) to formulate the most relevant, human-like recommendation. our long term goal is to build personal AI.
                             </div>
                       </div>
 
@@ -938,8 +938,8 @@
                             </div>
                         <div class="faq-answer">
                               We implemented **client-side event tracking**. When you click a business link, a
-                    JavaScript function (`handleBusinessClick`) intercepts the click, sends a quick, non-blocking
-                    <code>/track_click</code> API request in the background, and immediately redirects you to the
+                    JavaScript function  intercepts the click, sends a quick, non-blocking
+                    request in the background, and immediately redirects you to the
                     website/phone/email destination. This ensures accurate tracking with zero user delay.
                             </div>
                       </div>
@@ -951,7 +951,7 @@
                         <div class="faq-answer">
                               **No.** If you are listed as **Global**, the system ignores location data and prioritizes
                     matching your services and categories. Only businesses listed as **Local** (with accurate GPS
-                    coordinates) are included in the proximity search criteria.
+                    coordinates) are included in the proximity search criteria. -- only currently but in future yes.
                             </div>
                       </div>
 
@@ -961,7 +961,7 @@
     </div>
 
         <footer>
-            <p>&copy; 2025 HelperAI. All rights reserved. | Smart Business Discovery.</p>
+            <p>&copy; 2025 HEAI. All rights reserved. | Smart AI Business Discovery.</p>
           </footer>
 
        
