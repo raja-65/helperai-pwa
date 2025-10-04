@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -256,7 +257,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .error {
@@ -355,7 +358,7 @@
             .metrics-grid {
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             }
-            
+
             .business-info {
                 grid-template-columns: 1fr;
             }
@@ -435,7 +438,8 @@
                     </div>
                 </div>
                 <div style="margin-top: 20px;">
-                    <p><strong style="color: #2c3e50;">Services:</strong> <span id="business-services" style="color: #666;">Loading...</span></p>
+                    <p><strong style="color: #2c3e50;">Services:</strong> <span id="business-services"
+                            style="color: #666;">Loading...</span></p>
                 </div>
                 <div style="margin-top: 20px;">
                     <button id="editBusinessBtn" class="btn">Edit Business Info</button>
@@ -557,6 +561,14 @@
                     <input type="text" id="edit_address">
                 </div>
                 <div class="form-group">
+                    <label>Latitude (Optional)</label>
+                    <input type="text" id="edit_lat">
+                </div>
+                <div class="form-group">
+                    <label>Longitude (Optional)</label>
+                    <input type="text" id="edit_lon">
+                </div>
+                <div class="form-group">
                     <label>Website</label>
                     <input type="url" id="edit_website">
                 </div>
@@ -641,7 +653,7 @@
             document.getElementById("business-phone").textContent = data.business_phone || "Not provided";
             document.getElementById("business-address").textContent = data.business_address || "Not provided";
             document.getElementById("business-services").textContent = data.business_services || "Not provided";
-            
+
             const status = data.business_status || "Unknown";
             document.getElementById("business-status").innerHTML = `<span class="status-badge status-${status.toLowerCase()}">${status}</span>`;
             document.getElementById("business-expiry").textContent = data.business_expiry || "Not available";
@@ -653,7 +665,7 @@
             document.getElementById("click-rate").textContent = (data.click_through_rate || 0).toFixed(1) + "%";
 
             // Click breakdown
-            const clicksByType = data.clicks_by_type || {website: 0, phone: 0, email: 0};
+            const clicksByType = data.clicks_by_type || { website: 0, phone: 0, email: 0 };
             document.getElementById("website-clicks").textContent = clicksByType.website || 0;
             document.getElementById("phone-clicks").textContent = clicksByType.phone || 0;
             document.getElementById("email-clicks").textContent = clicksByType.email || 0;
@@ -691,7 +703,7 @@
 
         function renderChart(timeline) {
             const ctx = document.getElementById('analyticsChart');
-            
+
             if (analyticsChart) {
                 analyticsChart.destroy();
             }
@@ -746,7 +758,6 @@
             });
         }
 
-        // Edit Business Modal
         document.getElementById("editBusinessBtn").onclick = () => {
             document.getElementById("edit_name").value = currentBusinessData.business_name || "";
             document.getElementById("edit_email").value = currentBusinessData.business_email || "";
@@ -755,7 +766,9 @@
             document.getElementById("edit_services").value = currentBusinessData.business_services || "";
             document.getElementById("edit_address").value = currentBusinessData.business_address || "";
             document.getElementById("edit_website").value = currentBusinessData.business_website || "";
-            
+            document.getElementById("edit_lat").value = currentBusinessData.business_lat || "";
+            document.getElementById("edit_lon").value = currentBusinessData.business_lon || "";
+
             document.getElementById("editModal").classList.add("show");
         };
 
@@ -774,7 +787,9 @@
                 categories: document.getElementById("edit_categories").value.trim(),
                 services: document.getElementById("edit_services").value.trim(),
                 address: document.getElementById("edit_address").value.trim(),
-                website: document.getElementById("edit_website").value.trim()
+                website: document.getElementById("edit_website").value.trim(),
+                lat: document.getElementById("edit_lat").value.trim() || null,
+                lon: document.getElementById("edit_lon").value.trim() || null
             };
 
             try {
@@ -792,7 +807,7 @@
                 if (response.ok) {
                     alert("Business information updated successfully!");
                     closeEditModal();
-                    loadDashboard(); // Reload dashboard
+                    loadDashboard();
                 } else {
                     alert("Update failed: " + (result.error || "Unknown error"));
                 }
@@ -809,11 +824,12 @@
         };
 
         // Close modal on outside click
-        document.getElementById("editModal").onclick = function(e) {
+        document.getElementById("editModal").onclick = function (e) {
             if (e.target === this) {
                 closeEditModal();
             }
         };
     </script>
 </body>
+
 </html>
